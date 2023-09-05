@@ -10,13 +10,6 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 
 class App extends React.Component {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: "Início",
-    };
-  }
-
   render() {
     return (
       <HashRouter>
@@ -31,7 +24,6 @@ class App extends React.Component {
             <Route path="/">
               <div className="interface">
                 <Header />
-
                 <Main />
 
                 <Toaster />

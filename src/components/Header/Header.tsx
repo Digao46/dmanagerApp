@@ -4,30 +4,22 @@ import { Link } from "react-router-dom";
 
 import "./Header.scss";
 
-const Logo = require("../../assets/imgs/logo.png");
+import isAuthorizated from "../../services/Authorization/Authorization";
 
-const user = JSON.parse(localStorage.getItem("user")!);
+const Logo = require("../../assets/imgs/logo.png");
 
 class Header extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      username: "Usuário",
-      user: "",
       redirectTo: null,
     };
-  }
-
-  componentDidMount(): void {
-    if (user) {
-      this.setState({ user: user.username });
-    }
   }
 
   logOut = () => {
     localStorage.removeItem("user");
 
-    this.setState({ redirectTo: "login" });
+    this.setState({ redirectTo: "/login" });
   };
 
   render() {
@@ -36,13 +28,13 @@ class Header extends React.Component<any, any> {
     return (
       <header className="d-flex flex-column">
         <div className="container d-flex justify-content-between">
-          <div className="logoArea d-flex justify-content-start col-2">
+          <div className="logoArea d-flex justify-content-start col-1">
             <Link to="/">
               <img src={Logo} alt="Logo" />
             </Link>
           </div>
 
-          <nav className="d-flex justify-content-center align-items-center col-8">
+          <nav className="d-flex justify-content-center align-items-center col-10">
             <ul className="d-flex justify-content-center align-items-center col-12">
               <li className="d-flex justify-content-center align-items-center col-1 px-5">
                 <Link
@@ -104,7 +96,7 @@ class Header extends React.Component<any, any> {
                     </Link>
                   </li>
 
-                  {user.isAdmin && (
+                  {isAuthorizated() && (
                     <li className="dropdown-item d-flex align-items-center">
                       <Link to="/storage/trash" className="ms-2">
                         <i className="fa fa-trash me-1" /> Excluídos
@@ -149,7 +141,7 @@ class Header extends React.Component<any, any> {
                     </Link>
                   </li>
 
-                  {user.isAdmin && (
+                  {isAuthorizated() && (
                     <li className="dropdown-item d-flex align-items-center">
                       <Link to="/users/add" className="ms-2">
                         <i className="fa fa-plus me-1" /> Novo Usuário
@@ -157,7 +149,7 @@ class Header extends React.Component<any, any> {
                     </li>
                   )}
 
-                  {user.isAdmin && (
+                  {isAuthorizated() && (
                     <li className="dropdown-item d-flex align-items-center">
                       <Link to="/users" className="ms-2">
                         <i className="fa fa-user me-1" /> Usuários
@@ -224,8 +216,25 @@ class Header extends React.Component<any, any> {
             </ul>
           </nav>
 
-          <div className="userArea d-flex justify-content-end align-items-center col-2">
-            <i className="fa fa-circle-user" />
+          <div className="userArea d-flex justify-content-center align-items-center col-1">
+            <i className="fa fa-circle-user ms-5" />
+
+            <ul className="dropdown-list ms-3">
+              <li className="dropdown-item d-flex align-items-center">
+                <Link to="/settings" className="ms-2">
+                  <i className="fa fa-gear me-2" /> Configurações
+                </Link>
+              </li>
+              <li
+                onClick={this.logOut}
+                className="dropdown-item d-flex align-items-center"
+              >
+                <span className="ms-2">
+                  <i className="fa fa-arrow-right-from-bracket me-2" />
+                  Sair
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
