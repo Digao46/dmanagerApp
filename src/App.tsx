@@ -1,19 +1,15 @@
 import React from "react";
-import { HashRouter, Route, Redirect, Switch } from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import Login from "./pages/Login/Login";
 
 import "./assets/scss/globals.scss";
 
-class App extends React.Component {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: "Início",
-    };
-  }
+import Header from "./components/Header/Header";
+import Main from "./components/Main/Main";
 
+class App extends React.Component {
   render() {
     return (
       <HashRouter>
@@ -25,21 +21,14 @@ class App extends React.Component {
               <Toaster />
             </Route>
 
-            {/* <Route path="/">
+            <Route path="/">
               <div className="interface">
-                <Header
-                  title={this.state.title}
-                  isVisible={this.state.isVisible}
-                  toggleMenu={this.toggleMenu}
-                />
-
-                <Nav />
-
-                <Main setTitle={this.setTitle} state={this.state} />
+                <Header />
+                <Main />
 
                 <Toaster />
               </div>
-            </Route> */}
+            </Route>
           </Switch>
         </div>
       </HashRouter>

@@ -29,9 +29,9 @@ class Login extends React.Component<any, any> {
     };
 
     try {
-      const user = await logIn(data);
+      const res = await logIn(data);
 
-      localStorage.setItem("user", JSON.stringify(user.data));
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
       this.setState({ redirectTo: "/" });
     } catch (err: any) {
