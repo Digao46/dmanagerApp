@@ -4,9 +4,10 @@ import { Toaster } from "react-hot-toast";
 
 import Login from "./pages/Login/Login";
 
-import Header from "./components/Header/Header";
-
 import "./assets/scss/globals.scss";
+
+import Header from "./components/Header/Header";
+import Main from "./components/Main/Main";
 
 class App extends React.Component {
   constructor(props: any) {
@@ -31,9 +32,7 @@ class App extends React.Component {
               <div className="interface">
                 <Header />
 
-                {/* <Nav /> */}
-
-                {/* <Main setTitle={this.setTitle} state={this.state} /> */}
+                <Main />
 
                 <Toaster />
               </div>

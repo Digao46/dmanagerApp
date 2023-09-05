@@ -1,0 +1,49 @@
+.card {
+  max-height: 180px;
+  border-radius: 5px;
+  color: var(--white) !important;
+
+  p {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+  }
+
+  .btn {
+    width: 100px;
+    border-radius: 20px;
+    background-color: var(--primary-500);
+
+    a {
+      text-decoration: none;
+      color: var(--secondary);
+      font-size: 1rem;
+    }
+
+    &:hover,
+    &:active {
+      background-color: var(--primary-800) !important;
+
+      a {
+        font-weight: 500;
+      }
+    }
+  }
+
+  i {
+    font-size: 3rem;
+  }
+}
+
+.sales {
+  background: linear-gradient(to right, #d8a421a7, #826314);
+}
+
+.storage {
+  background: linear-gradient(to right, rgb(73, 123, 239), rgb(41, 41, 88));
+}
+
+.cash {
+  background: linear-gradient(to right, rgb(41, 147, 208), rgb(6, 82, 121));
+}
