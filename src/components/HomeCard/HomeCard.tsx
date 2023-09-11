@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import "./HomeCard.scss";
 
@@ -11,7 +11,7 @@ class HomeCard extends React.Component<any, any> {
   render() {
     return (
       <div
-        className={`${this.props.class} card d-flex justify-content-center align-items-center col-3`}
+        className={`${this.props.class} homeCard d-flex justify-content-center align-items-center col-3`}
       >
         <div className="row w-100 h-100">
           <div className="col-6 d-flex flex-column align-items-start justify-content-around h-100">

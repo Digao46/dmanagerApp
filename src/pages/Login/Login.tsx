@@ -28,15 +28,14 @@ class Login extends React.Component<any, any> {
       password: this.state.password,
     };
 
-    try {
-      const res = await logIn(data);
-
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      this.setState({ redirectTo: "/" });
-    } catch (err: any) {
-      return toast.error(err.response.data.message);
-    }
+    logIn(data)
+      .then((res) => {
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        this.setState({ redirectTo: "/" });
+      })
+      .catch((err: any) => {
+        return toast.error(err.response.data.message);
+      });
   };
 
   handleChange = (e: any) => {
