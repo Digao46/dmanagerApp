@@ -64,7 +64,7 @@ class Sales extends React.Component<any, any> {
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="totalLabel">Valor total das vendas:</p>
 
-              <div className="divValue d-flex justify-content-between mt-3">
+              <div className="value d-flex justify-content-between mt-3">
                 <span className="moneyLabel d-flex align-items-center me-2">
                   R$
                 </span>
@@ -80,7 +80,7 @@ class Sales extends React.Component<any, any> {
                   <i
                     // onClick={this.handleVisualization}
                     id="showTotalSold"
-                    className="fa fa-eye-slash"
+                    className="fa-solid fa-eye-slash"
                   ></i>
                 </span>
               </div>
@@ -102,7 +102,7 @@ class Sales extends React.Component<any, any> {
                   </Space>
                   <button
                     type="submit"
-                    className="btn d-flex justify-content-center align-items-center mb-1"
+                    className="btn d-flex justify-content-center align-items-center mt-1 mb-1"
                   >
                     <i className="fa fa-search" />
                   </button>

@@ -5,6 +5,7 @@ section {
   .cardTotal {
     background-color: var(--primary-500);
     height: 80vh;
+    border-radius: 5px;
 
     .totalLabel {
       font-size: 0.8rem;
@@ -12,20 +13,24 @@ section {
       color: var(--secondary);
     }
 
-    .divValue {
+    .value {
       .moneyLabel {
         font-size: 1rem;
         font-weight: 500;
+        color: var(--white);
       }
 
       .totalValue {
         font-size: 1.7rem;
         color: var(--secondary);
+        margin: 0;
+        padding: 0;
       }
 
       #showOrHidden {
         i {
           font-size: 1rem;
+          color: var(--white);
         }
       }
     }
@@ -64,6 +69,9 @@ section {
             background-color: var(--primary-500);
             border: solid 2px var(--secondary);
             color: var(--white);
+
+            width: 100px;
+            border-radius: 20px;
 
             i {
               font-size: 1rem;
