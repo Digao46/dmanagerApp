@@ -1,0 +1,101 @@
+section {
+  height: 100%;
+  width: 100%;
+
+  .cardTotal {
+    background-color: var(--primary-500);
+    height: 80vh;
+
+    .totalLabel {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--secondary);
+    }
+
+    .divValue {
+      .moneyLabel {
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .totalValue {
+        font-size: 1.7rem;
+        color: var(--secondary);
+      }
+
+      #showOrHidden {
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .filter {
+      span {
+        color: var(--secondary);
+      }
+
+      .formFilter {
+        form {
+          height: 100%;
+          width: 100%;
+
+          .ant-picker {
+            background-color: var(--primary-500);
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+          }
+
+          .ant-picker-clear {
+            background-color: var(--primary-500) !important;
+          }
+
+          input {
+            background-color: var(--primary-500);
+            color: var(--secondary);
+            font-size: 0.7rem;
+
+            &::placeholder {
+              color: var(--secondary);
+            }
+          }
+
+          .btn {
+            background-color: var(--primary-500);
+            border: solid 2px var(--secondary);
+            color: var(--white);
+
+            i {
+              font-size: 1rem;
+            }
+
+            &:hover {
+              box-shadow: 0.5px 0.5px 3px var(--secondary);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .mainDiv {
+    height: 80vh;
+    overflow: auto;
+
+    color: var(--secondary);
+
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 15px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--primary-500);
+      border: none;
+      border-radius: 20px;
+    }
+  }
+}

@@ -13,7 +13,7 @@ class Home extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     if (!isAuthenticated()) {
       window.alert("Sessão Expirada. Por favor efetue o login novamente!");
       this.setState({ redirectTo: "/login" });

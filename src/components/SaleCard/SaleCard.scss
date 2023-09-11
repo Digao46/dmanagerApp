@@ -1,0 +1,38 @@
+.sale {
+  background-color: var(--primary-500);
+  height: 120px;
+  border-radius: 5px;
+
+  .cardHeader {
+    .clientLabel,
+    .sellerLabel,
+    .dateLabel,
+    .hourLabel,
+    .trashCan {
+      font-size: 0.8rem;
+      font-weight: 400;
+
+      i {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .totalValue {
+    font-size: 1.7rem;
+
+    .totalLabel {
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+
+    .moneyLabel {
+      font-size: 1rem;
+      font-weight: 400;
+
+      .total {
+        font-size: 1px !important;
+      }
+    }
+  }
+}
