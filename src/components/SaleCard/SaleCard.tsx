@@ -1,4 +1,7 @@
 import React from "react";
+import { toast } from "react-hot-toast";
+
+import { deleteSale, findSales } from "../../services/Api/Sales/SalesEndpoint";
 
 import isAuthorizated from "../../services/Authorization/Authorization";
 
@@ -26,6 +29,32 @@ class SaleCard extends React.Component<any, any> {
     return formatedTime;
   }
 
+  deleteSale(id: string) {
+    const newSales = this.props.sales.filter((sale: any) => sale._id !== id);
+
+    this.props.sync(newSales);
+
+    deleteSale(id)
+      .then((res) => {
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        } else {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/sales" });
+        }
+      });
+  }
+
   render() {
     return (
       <div className="sale col-8 d-flex flex-row justify-content-center align-items-center mb-2 me-2">
@@ -45,7 +74,7 @@ class SaleCard extends React.Component<any, any> {
             </span>
             {isAuthorizated() && (
               <span
-                //   onClick={() => this.deleteSale(sale.id)}
+                onClick={() => this.deleteSale(this.props.sale._id)}
                 className="trashCan"
               >
                 <i className="fa fa-trash"></i>

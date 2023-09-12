@@ -23,3 +23,13 @@ export async function findSales(query: any) {
 
   return await salesEndpoint.get("/", { params });
 }
+
+export async function filterSales(query: any) {
+  const params = new URLSearchParams(query);
+
+  return await salesEndpoint.get("/filter", { params });
+}
+
+export async function deleteSale(id: string) {
+  return await salesEndpoint.delete(`/delete/${id}`);
+}
