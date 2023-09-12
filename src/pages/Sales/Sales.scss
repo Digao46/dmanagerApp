@@ -31,6 +31,10 @@ section {
         i {
           font-size: 1rem;
           color: var(--white);
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }
@@ -80,6 +84,44 @@ section {
             &:hover {
               box-shadow: 0.5px 0.5px 3px var(--secondary);
             }
+          }
+        }
+      }
+    }
+
+    .pagination {
+      color: var(--secondary);
+
+      .perPage {
+        span {
+          font-size: 0.8rem;
+        }
+
+        select {
+          background-color: var(--primary-500);
+          border: 1px solid var(--secondary);
+          border-radius: 4px;
+          color: var(--secondary);
+        }
+      }
+
+      .prevNext {
+        color: var(--secondary) !important;
+
+        a {
+          font-size: 0.9rem;
+          color: var(--secondary) !important;
+          text-decoration: none;
+
+          &:hover {
+            scale: 1.01;
+          }
+        }
+
+        .nextNPrevious {
+          &:hover {
+            cursor: pointer;
+            scale: 1.1;
           }
         }
       }

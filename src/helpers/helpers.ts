@@ -4,3 +4,21 @@ export const handleChange = (classe: any, e: any) => {
 
   classe.setState({ [inputName]: value });
 };
+
+export const filter = async (
+  classe: any,
+  field: string,
+  conditions: any[],
+  func: Function
+) => {
+  const whereQuery = { ...classe.state.query };
+
+  whereQuery.where = JSON.stringify({
+    field: field,
+    conditions: conditions,
+  });
+
+  classe.setState({ query: whereQuery });
+
+  return await func(whereQuery);
+};
