@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DatePicker, Space } from "antd";
 import { toast } from "react-hot-toast";
 
@@ -28,7 +28,7 @@ class Sales extends React.Component<any, any> {
         limit: 50,
         page: 1,
         orderBy: JSON.stringify([{ field: "createdAt", direction: "desc" }]),
-        where: {},
+        where: JSON.stringify({}),
       },
 
       sales: [],
@@ -51,29 +51,17 @@ class Sales extends React.Component<any, any> {
     this.findSales(this.state.query);
   }
 
-  syncSalesAfterDeleting = (newSales: any) => {
-    let total = 0;
-
-    newSales.map((sale: any) => (total += sale.total));
-
-    this.setState({ sales: newSales, total: total });
-  };
-
   findSales = async (query: any) => {
     await findSales(query)
       .then((res) => {
-        let total = 0;
-
-        res.data.data.sales.map((sale: any) => {
-          total += sale.total;
-        });
-
-        let pages = Math.ceil(res.data.data.documents / this.state.query.limit);
+        let pages = Math.ceil(
+          res.data.data.documents.qtd / this.state.query.limit
+        );
 
         this.setState({
-          sales: res.data.data.sales,
-          totalPages: pages,
-          total: total,
+          sales: res.data.data.sales || [],
+          totalPages: pages || 1,
+          total: res.data.data.documents.total || 0,
         });
       })
       .catch((err: any) => {
@@ -91,14 +79,20 @@ class Sales extends React.Component<any, any> {
       });
   };
 
-  filterSales = async (field: string, conditions: any[]) => {
+  filterSales = async (e: any, field: string, conditions: any[]) => {
+    e.preventDefault();
+
     await filter(this, field, conditions, filterSales)
       .then((res: any) => {
-        let total = 0;
+        let pages = Math.ceil(
+          res.data.data.documents.qtd / this.state.query.limit
+        );
 
-        res.data.data.sales?.map((sale: any) => (total += sale.total));
-
-        this.setState({ sales: res.data.data.sales, total: total });
+        this.setState({
+          sales: res.data.data.sales || [],
+          totalPages: pages || 1,
+          total: res.data.data.documents.total || 0,
+        });
 
         toast.success("Filtro aplicado!");
       })
@@ -117,6 +111,14 @@ class Sales extends React.Component<any, any> {
       });
   };
 
+  syncSalesAfterDeleting = (newSales: any) => {
+    let total = 0;
+
+    newSales.map((sale: any) => (total += sale.total));
+
+    this.setState({ sales: newSales, total: total });
+  };
+
   handleVisualization = () => {
     const span = document.getElementById("total") as HTMLElement;
 
@@ -132,7 +134,14 @@ class Sales extends React.Component<any, any> {
   };
 
   handleDatePickerChange = async (e: any) => {
-    await this.findSales(this.state.query);
+    const auxQuery = { ...this.state.query };
+
+    auxQuery.where = JSON.stringify({}); // Resetando o where para poder buscar as vendas
+    auxQuery.page = 1; // Resetando a page para evitar erros
+
+    this.setState({ query: auxQuery });
+
+    await this.findSales(auxQuery);
 
     const span = document.getElementById("total") as HTMLElement;
 
@@ -151,12 +160,6 @@ class Sales extends React.Component<any, any> {
         begin: dateBegin,
         end: dateEnd,
       });
-
-      let total = 0;
-
-      this.state.sales.map((sale: any) => (total += sale.total));
-
-      this.setState({ total: total });
     }
   };
 
@@ -203,8 +206,8 @@ class Sales extends React.Component<any, any> {
 
     return (
       <section className="container d-flex justify-content-center col-12 pt-3">
-        <div className="container row d-flex justify-content-center">
-          <div className="cardTotal d-flex flex-column justify-content-evenly align-items-center col-3 mb-2">
+        <div className="container d-flex justify-content-center">
+          <div className="cardTotal d-flex flex-column justify-content-evenly align-items-center col-3 me-1">
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="totalLabel">Valor total das vendas:</p>
 
@@ -236,8 +239,8 @@ class Sales extends React.Component<any, any> {
               <div className="formFilter d-flex justify-content-center align-items-center mt-2">
                 <form
                   className="d-flex flex-column align-items-center"
-                  onSubmit={() =>
-                    this.filterSales("createdAt", [
+                  onSubmit={(e) =>
+                    this.filterSales(e, "createdAt", [
                       {
                         operator: "$gte",
                         value: this.state.begin,

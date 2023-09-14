@@ -18,6 +18,8 @@ export const filter = async (
     conditions: conditions,
   });
 
+  whereQuery.page = 1;
+
   classe.setState({ query: whereQuery });
 
   return await func(whereQuery);
