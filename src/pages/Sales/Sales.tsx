@@ -59,9 +59,9 @@ class Sales extends React.Component<any, any> {
         );
 
         this.setState({
-          sales: res.data.data.sales || [],
-          totalPages: pages || 1,
-          total: res.data.data.documents.total || 0,
+          sales: res.data.data.sales,
+          totalPages: pages,
+          total: res.data.data.documents.total,
         });
       })
       .catch((err: any) => {
@@ -74,6 +74,12 @@ class Sales extends React.Component<any, any> {
 
           return;
         } else {
+          this.setState({
+            sales: [],
+            totalPages: 1,
+            total: 0,
+          });
+
           return toast.error(err.response.data.message);
         }
       });
@@ -89,9 +95,9 @@ class Sales extends React.Component<any, any> {
         );
 
         this.setState({
-          sales: res.data.data.sales || [],
-          totalPages: pages || 1,
-          total: res.data.data.documents.total || 0,
+          sales: res.data.data.sales,
+          totalPages: pages,
+          total: res.data.data.documents.total,
         });
 
         toast.success("Filtro aplicado!");
@@ -106,6 +112,12 @@ class Sales extends React.Component<any, any> {
 
           return;
         } else {
+          this.setState({
+            sales: [],
+            totalPages: 1,
+            total: 0,
+          });
+
           return toast.error(err.response.data.message);
         }
       });
@@ -315,6 +327,7 @@ class Sales extends React.Component<any, any> {
                 key={sale._id}
               >
                 <SaleCard
+                  width={"col-9"}
                   sale={sale}
                   sales={this.state.sales}
                   sync={this.syncSalesAfterDeleting}

@@ -46,6 +46,10 @@ export async function closeSale(id: string) {
   return await salesEndpoint.put(`/close/${id}`);
 }
 
+export async function closeManySales(ids: string[]) {
+  return await salesEndpoint.put(`/close/all/${ids}`);
+}
+
 export async function deleteSale(id: string) {
   return await salesEndpoint.delete(`/delete/${id}`);
 }

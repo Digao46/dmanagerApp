@@ -57,7 +57,9 @@ class SaleCard extends React.Component<any, any> {
 
   render() {
     return (
-      <div className="sale col-8 d-flex flex-row justify-content-center align-items-center mb-2 me-2">
+      <div
+        className={`sale ${this.props.width} d-flex flex-row justify-content-center align-items-center mb-2 me-2`}
+      >
         <div className="col-8">
           <div className="cardHeader d-flex justify-content-between">
             <span className="clientLabel me-3">

@@ -157,5 +157,22 @@ section {
       border: none;
       border-radius: 20px;
     }
+
+    .closeAllAction {
+      height: 120px;
+      background-color: var(--primary-500);
+      border-radius: 5px;
+
+      i {
+        color: rgb(1, 255, 1) !important;
+        font-size: 2.4rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: var(--secondary);
+        margin: 0;
+      }
+    }
   }
 }

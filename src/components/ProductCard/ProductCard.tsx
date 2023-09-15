@@ -9,7 +9,7 @@ class ProductCard extends React.Component<any, any> {
 
   render() {
     return (
-      <div className="products d-flex flex-column justify-content-center col-4">
+      <div className="products d-flex flex-column justify-content-center col-3 me-2">
         <div className="cardHeader d-flex justify-content-around">
           <p className="itemsLabel d-flex justify-content-center pe-5 col-8 ">
             {" "}

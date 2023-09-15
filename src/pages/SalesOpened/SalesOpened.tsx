@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-hot-toast";
 
 import {
+  closeManySales,
   closeSale,
   findSalesOpened,
   findSalesOpenedByClientId,
@@ -70,9 +71,9 @@ class SalesOpened extends React.Component<any, any> {
         );
 
         this.setState({
-          sales: res.data.data.sales || [],
-          totalPages: pages || 1,
-          total: res.data.data.documents.total || 0,
+          sales: res.data.data.sales,
+          totalPages: pages,
+          total: res.data.data.documents.total,
         });
       })
       .catch((err: any) => {
@@ -85,6 +86,12 @@ class SalesOpened extends React.Component<any, any> {
 
           return;
         } else {
+          this.setState({
+            sales: [],
+            totalPages: 1,
+            total: 0,
+          });
+
           return toast.error(err.response.data.message);
         }
       });
@@ -96,9 +103,9 @@ class SalesOpened extends React.Component<any, any> {
         let pages = res.data.data.documents.qtd / this.state.limit;
 
         this.setState({
-          sales: res.data.data.sales || [],
-          totalPages: pages || 1,
-          total: client.debit || 0,
+          sales: res.data.data.sales,
+          totalPages: pages,
+          total: client.debit,
           isFiltered: true,
         });
       })
@@ -114,6 +121,7 @@ class SalesOpened extends React.Component<any, any> {
         } else {
           this.setState({
             sales: [],
+            totalPages: 1,
             total: 0,
           });
 
@@ -122,14 +130,65 @@ class SalesOpened extends React.Component<any, any> {
       });
   };
 
+  closeSale = async (id: string) => {
+    await closeSale(id)
+      .then((res: any) => {
+        if (this.state.client._id) {
+          this.findSalesOpenedByClientId(this.state.client, this.state.query);
+        } else {
+          this.findSalesOpened(this.state.query);
+        }
+
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        } else {
+          return toast.error(err.response.data.message);
+        }
+      });
+  };
+
   closeAllSales = async (sales: string[]) => {
+    let ids: any[] = [];
+
     sales.forEach(async (sale: any) => {
-      await closeSale(sale._id);
+      ids.push(sale._id);
     });
 
-    this.findSalesOpened(this.state.query).then(() =>
-      toast.success("Vendas encerradas")
-    );
+    await closeManySales(ids)
+      .then((res: any) => {
+        this.findSalesOpened(this.state.query).then(() => {
+          const input = document.getElementById(
+            "clientInput"
+          ) as HTMLInputElement;
+          input.value = "";
+
+          this.setState({ client: {} });
+        });
+
+        toast.success(res.data.message);
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        } else {
+          return toast.error(err.response.data.message);
+        }
+      });
   };
 
   handleInputChange = async () => {
@@ -157,7 +216,7 @@ class SalesOpened extends React.Component<any, any> {
           .replace(/[\u0300-\u036f]/g, "")
     )[0];
 
-    this.setState({ client: client, isFiltered: false });
+    this.setState({ client: client ?? {}, isFiltered: false });
   };
 
   syncSalesAfterDeleting = (newSales: any) => {
@@ -361,11 +420,23 @@ class SalesOpened extends React.Component<any, any> {
                   key={sale._id}
                 >
                   <SaleCard
+                    width={"col-8"}
                     sale={sale}
                     sales={this.state.sales}
                     sync={this.syncSalesAfterDeleting}
                   />
+
                   <ProductCard sale={sale} />
+
+                  <div className="closeAllAction d-flex align-items-center justify-content-center col-1">
+                    <button
+                      className="btn"
+                      onClick={() => this.closeSale(sale._id)}
+                    >
+                      <i className="fa fa-circle-dollar-to-slot" />
+                      <p> Faturar </p>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
