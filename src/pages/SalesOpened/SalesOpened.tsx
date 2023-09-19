@@ -7,14 +7,17 @@ import {
   findSalesOpened,
   findSalesOpenedByClientId,
 } from "../../services/Api/Sales/SalesEndpoint";
+import { findClients } from "../../services/Api/Clients/ClientsEndpoint";
+
 import isAuthenticated from "../../services/Authentication/Authentication";
 
 import SaleCard from "../../components/SaleCard/SaleCard";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
+import { nextPage, prevPage } from "../../helpers/helpers";
+
 import "./SalesOpened.scss";
 import { Redirect } from "react-router";
-import { findClients } from "../../services/Api/Clients/ClientsEndpoint";
 
 class SalesOpened extends React.Component<any, any> {
   constructor(props: any) {
@@ -85,22 +88,26 @@ class SalesOpened extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          this.setState({
-            sales: [],
-            totalPages: 1,
-            total: 0,
-          });
-
-          return toast.error(err.response.data.message);
         }
+
+        this.setState({
+          sales: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
       });
   };
 
-  findSalesOpenedByClientId = async (client: any, query: any) => {
+  findSalesOpenedByClientId = async (client: any, query: any, e?: any) => {
+    if (e) e.preventDefault();
+
     findSalesOpenedByClientId(client._id, query)
       .then((res: any) => {
-        let pages = res.data.data.documents.qtd / this.state.limit;
+        let pages = Math.ceil(
+          res.data.data.documents.qtd / this.state.query.limit
+        );
 
         this.setState({
           sales: res.data.data.sales,
@@ -118,15 +125,15 @@ class SalesOpened extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          this.setState({
-            sales: [],
-            totalPages: 1,
-            total: 0,
-          });
-
-          return toast.error(err.response.data.message);
         }
+
+        this.setState({
+          sales: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
       });
   };
 
@@ -150,9 +157,9 @@ class SalesOpened extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          return toast.error(err.response.data.message);
         }
+
+        return toast.error(err.response.data.message);
       });
   };
 
@@ -185,14 +192,15 @@ class SalesOpened extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          return toast.error(err.response.data.message);
         }
+
+        return toast.error(err.response.data.message);
       });
   };
 
-  handleInputChange = async () => {
-    await this.findSalesOpened(this.state.query);
+  handleInputChange = async (e: any) => {
+    if (this.state.sales.length > 0)
+      await this.findSalesOpened(this.state.query);
 
     const span = document.getElementById("total") as HTMLElement;
     const icon = document.getElementById("showTotalOpened")! as HTMLElement;
@@ -202,19 +210,21 @@ class SalesOpened extends React.Component<any, any> {
       span.innerText = "-------";
     }
 
-    const input = document.getElementById("clientInput") as HTMLInputElement;
+    const name = e.target.value;
+    // const name = document.getElementById("clientInput") as HTMLInputElement;
 
-    const client = this.state.clients.filter(
+    const client = this.state.clients.find(
       (client: any) =>
         client.name
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "") ===
-        input.value
+        name
+          // name.value
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
-    )[0];
+    );
 
     this.setState({ client: client ?? {}, isFiltered: false });
   };
@@ -260,32 +270,20 @@ class SalesOpened extends React.Component<any, any> {
   previousPage = async (e: any) => {
     e.preventDefault();
 
-    const query = { ...this.state.query };
-
-    query.page = query.page - 1;
-
-    this.setState({ query: query });
-
     if (this.state.isFiltered) {
-      await this.findSalesOpenedByClientId(this.state.client, query);
+      prevPage(this, this.findSalesOpenedByClientId, this.state.client);
     } else {
-      await this.findSalesOpened(query);
+      prevPage(this, this.findSalesOpened);
     }
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
 
-    const query = { ...this.state.query };
-
-    query.page = query.page + 1;
-
-    this.setState({ query: query });
-
     if (this.state.isFiltered) {
-      await this.findSalesOpenedByClientId(this.state.client, query);
+      nextPage(this, this.findSalesOpenedByClientId, this.state.client);
     } else {
-      await this.findSalesOpened(query);
+      nextPage(this, this.findSalesOpened);
     }
   };
 
@@ -300,10 +298,11 @@ class SalesOpened extends React.Component<any, any> {
           <div className="formArea container d-flex justify-content-center align-items-center mb-2">
             <form
               className="d-flex justify-content-center align-itens-center"
-              onSubmit={() =>
+              onSubmit={(e) =>
                 this.findSalesOpenedByClientId(
                   this.state.client,
-                  this.state.query
+                  this.state.query,
+                  e
                 )
               }
             >
@@ -420,6 +419,7 @@ class SalesOpened extends React.Component<any, any> {
                   key={sale._id}
                 >
                   <SaleCard
+                    cardHeaderWidth={"col-11"}
                     width={"col-8"}
                     sale={sale}
                     sales={this.state.sales}

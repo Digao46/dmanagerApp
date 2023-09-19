@@ -42,6 +42,10 @@ export async function filterSales(query: any) {
   return await salesEndpoint.get("/filter", { params });
 }
 
+export async function addSale(params: any) {
+  return await salesEndpoint.post("/add", params);
+}
+
 export async function closeSale(id: string) {
   return await salesEndpoint.put(`/close/${id}`);
 }

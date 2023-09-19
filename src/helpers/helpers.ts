@@ -24,3 +24,31 @@ export const filter = async (
 
   return await func(whereQuery);
 };
+
+export const prevPage = async (classe: any, func: Function, param?: any) => {
+  const query = { ...classe.state.query };
+
+  query.page = query.page - 1;
+
+  classe.setState({ query: query });
+
+  if (param) {
+    return await func(param, query);
+  }
+
+  await func(query);
+};
+
+export const nextPage = async (classe: any, func: Function, param?: any) => {
+  const query = { ...classe.state.query };
+
+  query.page = query.page + 1;
+
+  classe.setState({ query: query });
+
+  if (param) {
+    return await func(param, query);
+  }
+
+  await func(query);
+};

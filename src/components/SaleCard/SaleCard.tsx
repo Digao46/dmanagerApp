@@ -47,11 +47,11 @@ class SaleCard extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          toast.error(err.response.data.message);
-
-          this.setState({ redirectTo: "/sales" });
         }
+
+        toast.error(err.response.data.message);
+
+        this.setState({ redirectTo: "/sales" });
       });
   }
 
@@ -60,18 +60,29 @@ class SaleCard extends React.Component<any, any> {
       <div
         className={`sale ${this.props.width} d-flex flex-row justify-content-center align-items-center mb-2 me-2`}
       >
-        <div className="col-8">
-          <div className="cardHeader d-flex justify-content-between">
-            <span className="clientLabel me-3">
-              Cliente: {this.props.sale.client.name}
+        <div className={`${this.props.cardHeaderWidth}`}>
+          <div className="cardHeader d-flex justify-content-around">
+            <span className="statusLabel me-1">
+              Status:{" "}
+              {this.props.sale.status == "Em Aberto" ? (
+                <i className="fa fa-box-open" />
+              ) : (
+                <i className="fa fa-check" />
+              )}
             </span>
-            <span className="sellerLabel me-3">
-              Vendedor: {this.props.sale.seller.username}
+
+            {this.props.sale.client.name && (
+              <span className="clientLabel me-1">
+                Cliente: {this.props.sale.client.name}
+              </span>
+            )}
+            <span className="sellerLabel me-1">
+              Usuário: {this.props.sale.seller.username}
             </span>
-            <span className="dateLabel me-3">
+            <span className="dateLabel me-1">
               Data: {this.formatDate(this.props.sale.createdAt)}
             </span>
-            <span className="hourLabel me-3">
+            <span className="hourLabel me-1">
               Hora: {this.formatHour(this.props.sale.createdAt)}
             </span>
             {isAuthorizated() && (
@@ -79,12 +90,12 @@ class SaleCard extends React.Component<any, any> {
                 onClick={() => this.deleteSale(this.props.sale._id)}
                 className="trashCan"
               >
-                <i className="fa fa-trash"></i>
+                <i className="fa fa-trash" />
               </span>
             )}
           </div>
 
-          <div className="totalValue d-flex justify-content-between align-items-end mt-2 mx-5">
+          <div className="totalValue d-flex justify-content-around align-items-end mt-2 mx-5">
             <p className="totalLabel mb-1"> Valor total: </p>
 
             <div>

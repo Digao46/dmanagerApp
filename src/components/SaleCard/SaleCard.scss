@@ -5,12 +5,17 @@
 
   .cardHeader {
     .clientLabel,
+    .statusLabel,
     .sellerLabel,
     .dateLabel,
     .hourLabel,
     .trashCan {
       font-size: 0.8rem;
       font-weight: 400;
+
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
 
       i {
         font-size: 0.8rem;

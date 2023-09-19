@@ -11,7 +11,7 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import "./Sales.scss";
 import { Redirect } from "react-router";
 
-import { filter } from "../../helpers/helpers";
+import { filter, nextPage, prevPage } from "../../helpers/helpers";
 
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
@@ -73,15 +73,15 @@ class Sales extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          this.setState({
-            sales: [],
-            totalPages: 1,
-            total: 0,
-          });
-
-          return toast.error(err.response.data.message);
         }
+
+        this.setState({
+          sales: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
       });
   };
 
@@ -111,15 +111,15 @@ class Sales extends React.Component<any, any> {
           localStorage.removeItem("user");
 
           return;
-        } else {
-          this.setState({
-            sales: [],
-            totalPages: 1,
-            total: 0,
-          });
-
-          return toast.error(err.response.data.message);
         }
+
+        this.setState({
+          sales: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
       });
   };
 
@@ -153,7 +153,7 @@ class Sales extends React.Component<any, any> {
 
     this.setState({ query: auxQuery });
 
-    await this.findSales(auxQuery);
+    if (this.state.sales.length > 0) await this.findSales(auxQuery);
 
     const span = document.getElementById("total") as HTMLElement;
 
@@ -190,25 +190,13 @@ class Sales extends React.Component<any, any> {
   previousPage = async (e: any) => {
     e.preventDefault();
 
-    const query = { ...this.state.query };
-
-    query.page = query.page - 1;
-
-    this.setState({ query: query });
-
-    await this.findSales(query);
+    await prevPage(this, this.findSales);
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
 
-    const query = { ...this.state.query };
-
-    query.page = query.page + 1;
-
-    this.setState({ query: query });
-
-    await this.findSales(query);
+    await nextPage(this, this.findSales);
   };
 
   render() {
@@ -288,7 +276,7 @@ class Sales extends React.Component<any, any> {
                   value={this.state.query.limit}
                   onChange={this.handleLimitChange}
                 >
-                  {this.state.perPage.map((option, index) => (
+                  {this.state.perPage.map((option: number, index: number) => (
                     <option key={index} value={option}>
                       {option}
                     </option>
@@ -327,6 +315,7 @@ class Sales extends React.Component<any, any> {
                 key={sale._id}
               >
                 <SaleCard
+                  cardHeaderWidth={"col-10"}
                   width={"col-9"}
                   sale={sale}
                   sales={this.state.sales}
