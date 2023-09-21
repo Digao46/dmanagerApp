@@ -24,6 +24,18 @@ export async function findProducts(query: any) {
   return await storageEndpoint.get("/", { params });
 }
 
+export async function findDeletedProducts(query: any) {
+  const params = new URLSearchParams(query);
+
+  return await storageEndpoint.get("/trash", { params });
+}
+
 export async function findProduct(id: string) {
   return await storageEndpoint.get(`/${id}`);
+}
+
+export async function findProductsByName(name: string, query: any) {
+  const params = new URLSearchParams(query);
+
+  return await storageEndpoint.get(`/name/${name}`, { params });
 }

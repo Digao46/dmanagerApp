@@ -69,9 +69,7 @@ class SalesOpened extends React.Component<any, any> {
   findSalesOpened = async (query: any) => {
     await findSalesOpened(query)
       .then((res: any) => {
-        let pages = Math.ceil(
-          res.data.data.documents.qtd / this.state.query.limit
-        );
+        let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
           sales: res.data.data.sales,
@@ -105,9 +103,7 @@ class SalesOpened extends React.Component<any, any> {
 
     findSalesOpenedByClientId(client._id, query)
       .then((res: any) => {
-        let pages = Math.ceil(
-          res.data.data.documents.qtd / this.state.query.limit
-        );
+        let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
           sales: res.data.data.sales,
@@ -211,7 +207,6 @@ class SalesOpened extends React.Component<any, any> {
     }
 
     const name = e.target.value;
-    // const name = document.getElementById("clientInput") as HTMLInputElement;
 
     const client = this.state.clients.find(
       (client: any) =>
@@ -220,7 +215,6 @@ class SalesOpened extends React.Component<any, any> {
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "") ===
         name
-          // name.value
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
@@ -295,7 +289,7 @@ class SalesOpened extends React.Component<any, any> {
     return (
       <section className="container d-flex justify-content-center col-12">
         <div className="container d-flex align-items-center flex-column">
-          <div className="formArea container d-flex justify-content-center align-items-center mb-2">
+          <div className="formSaleArea container d-flex justify-content-center align-items-center mb-2">
             <form
               className="d-flex justify-content-center align-itens-center"
               onSubmit={(e) =>
@@ -311,12 +305,12 @@ class SalesOpened extends React.Component<any, any> {
                 onChange={this.handleInputChange}
                 id="clientInput"
                 className="selectName col-6 me-2 px-4 py-1"
-                list="clientList"
+                list="clientsList"
                 placeholder="Selecione o cliente:"
                 required
               />
 
-              <datalist id="clientList">
+              <datalist id="clientsList">
                 {this.state.clients?.map((client: any) => (
                   <option id="clientId" key={client._id} value={client.name} />
                 ))}

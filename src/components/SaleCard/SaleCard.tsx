@@ -1,7 +1,7 @@
 import React from "react";
 import { toast } from "react-hot-toast";
 
-import { deleteSale, findSales } from "../../services/Api/Sales/SalesEndpoint";
+import { deleteSale } from "../../services/Api/Sales/SalesEndpoint";
 
 import isAuthorizated from "../../services/Authorization/Authorization";
 

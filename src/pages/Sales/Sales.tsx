@@ -54,9 +54,7 @@ class Sales extends React.Component<any, any> {
   findSales = async (query: any) => {
     await findSales(query)
       .then((res) => {
-        let pages = Math.ceil(
-          res.data.data.documents.qtd / this.state.query.limit
-        );
+        let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
           sales: res.data.data.sales,

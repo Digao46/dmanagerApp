@@ -52,3 +52,22 @@ export const nextPage = async (classe: any, func: Function, param?: any) => {
 
   await func(query);
 };
+
+export const goToPage = async (
+  classe: any,
+  func: Function,
+  desiredPage: number,
+  param?: any
+) => {
+  const query = { ...classe.state.query };
+
+  query.page = desiredPage;
+
+  classe.setState({ query: query });
+
+  if (param) {
+    return await func(param, query);
+  }
+
+  await func(query);
+};

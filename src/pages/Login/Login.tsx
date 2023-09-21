@@ -49,7 +49,7 @@ class Login extends React.Component<any, any> {
 
     return (
       <section className="d-flex justify-content-center align-items-center">
-        <div className="formArea container d-flex flex-column justify-content-center align-items-center col-4">
+        <div className="formLoginArea container d-flex flex-column justify-content-center align-items-center col-4">
           <div className="logoNTitle d-flex flex-column justify-content-center align-items-center mb-2">
             <img src={Logo} alt="Logo" />
             <h1>DN SMOKE BAR</h1>
