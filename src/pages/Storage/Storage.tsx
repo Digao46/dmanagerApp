@@ -7,6 +7,7 @@ import {
   findProducts,
   findProduct,
   findProductsByName,
+  deleteProduct,
 } from "../../services/Api/Storage/StorageEndpoint";
 
 import {
@@ -63,10 +64,11 @@ class Storage extends React.Component<any, any> {
       ],
 
       actions: [
-        { class: "edit", icon: "fa fa-edit" },
+        { class: "edit", icon: "fa fa-edit", func: this.findProduct },
         {
           class: "delete",
           icon: "fa fa-trash-can",
+          func: this.deleteProduct,
         },
       ],
 
@@ -151,6 +153,26 @@ class Storage extends React.Component<any, any> {
 
         return toast.error(err.response.data.message);
       });
+  };
+
+  deleteProduct = async (productId: string) => {
+    const newProducts = this.state.products.filter(
+      (product: any) => product._id !== productId
+    );
+
+    if (window.confirm("Realmente deseja excluir esse produto?")) {
+      await deleteProduct(productId).then((res: any) => {
+        toast.success(res.data.message);
+      });
+
+      this.syncProductsAfterDeleting(newProducts);
+    }
+
+    return;
+  };
+
+  syncProductsAfterDeleting = (newProducts: any) => {
+    this.setState({ products: newProducts });
   };
 
   handleChange = async (e: any) => {
@@ -254,12 +276,12 @@ class Storage extends React.Component<any, any> {
               content={this.state.content}
               data={this.state.products}
               actions={this.state.actions}
-              func={this.findProduct}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
               goToPage={this.goToPage}
               handleLimitChange={this.handleLimitChange}
               state={this.state}
+              sync={this.syncProductsAfterDeleting}
             />
           </div>
         </div>

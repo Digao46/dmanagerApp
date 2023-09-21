@@ -39,3 +39,11 @@ export async function findProductsByName(name: string, query: any) {
 
   return await storageEndpoint.get(`/name/${name}`, { params });
 }
+
+export async function deleteProduct(id: string) {
+  return await storageEndpoint.delete(`/delete/${id}`);
+}
+
+export async function restoreProduct(id: string) {
+  return await storageEndpoint.put(`/restore/${id}`);
+}

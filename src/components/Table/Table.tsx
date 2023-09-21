@@ -95,7 +95,7 @@ class Table extends React.Component<any, any> {
                       <button
                         key={key}
                         className="btn"
-                        onClick={() => this.props.func(data._id)}
+                        onClick={() => {action.func(data._id)}}
                       >
                         <i className={`${action.class} ${action.icon}`} />
                       </button>

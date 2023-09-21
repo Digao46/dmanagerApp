@@ -7,6 +7,7 @@ import isAuthorizated from "../../services/Authorization/Authorization";
 import {
   findDeletedProducts,
   findProduct,
+  restoreProduct,
 } from "../../services/Api/Storage/StorageEndpoint";
 
 import { nextPage, prevPage, goToPage } from "../../helpers/helpers";
@@ -62,6 +63,7 @@ class StorageTrash extends React.Component<any, any> {
         {
           class: "restore",
           icon: "fa fa-trash-can-arrow-up",
+          func: this.restoreProduct,
         },
       ],
 
@@ -114,6 +116,26 @@ class StorageTrash extends React.Component<any, any> {
     });
   };
 
+  restoreProduct = async (productId: string) => {
+    const newProducts = this.state.products.filter(
+      (product: any) => product._id !== productId
+    );
+
+    if (window.confirm("Realmente deseja restaurar esse produto?")) {
+      await restoreProduct(productId).then((res: any) => {
+        toast.success(res.data.message);
+      });
+
+      this.syncProductsAfterRestoring(newProducts);
+    }
+
+    return;
+  };
+
+  syncProductsAfterRestoring = (newProducts: any) => {
+    this.setState({ products: newProducts });
+  };
+
   handleLimitChange = async (e: any) => {
     e.preventDefault();
 
@@ -158,7 +180,6 @@ class StorageTrash extends React.Component<any, any> {
               content={this.state.content}
               data={this.state.products}
               actions={this.state.actions}
-              func={this.findProduct}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
               goToPage={this.goToPage}
