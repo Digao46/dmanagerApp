@@ -281,7 +281,6 @@ class Storage extends React.Component<any, any> {
               goToPage={this.goToPage}
               handleLimitChange={this.handleLimitChange}
               state={this.state}
-              sync={this.syncProductsAfterDeleting}
             />
           </div>
         </div>
