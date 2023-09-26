@@ -64,7 +64,12 @@ class Storage extends React.Component<any, any> {
       ],
 
       actions: [
-        { class: "edit", icon: "fa fa-edit", func: this.findProduct },
+        {
+          class: "edit",
+          icon: "fa fa-edit",
+          func: this.findProduct,
+          linkTo: "edit",
+        },
         {
           class: "delete",
           icon: "fa fa-trash-can",
@@ -119,7 +124,9 @@ class Storage extends React.Component<any, any> {
 
   findProduct = async (productId: string) => {
     await findProduct(productId).then((res: any) => {
-      this.setState({ product: res.data.product });
+      localStorage.setItem("product", JSON.stringify(res.data.product));
+
+      this.setState({ product: res.data.product, redirectTo: "/storage/edit" });
     });
   };
 

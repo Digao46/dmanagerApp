@@ -4,12 +4,12 @@ import { toast } from "react-hot-toast";
 
 import {
   findCanMountProducts,
-  addProduct,
+  editProduct,
 } from "../../services/Api/Storage/StorageEndpoint";
 
-import "./AddProduct.scss";
+import "./EditProduct.scss";
 
-class AddProduct extends React.Component<any, any> {
+class EditProduct extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -23,20 +23,12 @@ class AddProduct extends React.Component<any, any> {
         where: {},
       },
       products: [],
-
       product: {},
+
+      item: {},
 
       canMount: false,
       isMounted: false,
-
-      item: {
-        name: "",
-        costPrice: 0,
-        sellPrice: 0,
-        storage: 0,
-        category: "",
-        use: [],
-      },
 
       redirectTo: null,
     };
@@ -60,12 +52,25 @@ class AddProduct extends React.Component<any, any> {
 
         return toast.error(err.response.data.message);
       });
+
+    const product = JSON.parse(localStorage.getItem("product")!);
+
+    this.handleIsMountedCheckChange("", product.isMounted);
+    this.handleCanMountCheckChange("", product.canMount);
+
+    this.setState({ item: product });
   }
 
-  handleIsMountedCheckChange = () => {
+  handleIsMountedCheckChange = (e?: any, state?: any) => {
     let checkbox = document.getElementById(
       "isMountedCheck"
     ) as HTMLInputElement;
+
+    if (state) {
+      checkbox.checked = state;
+      this.setState({ isMounted: state });
+      return;
+    }
 
     if (checkbox.checked) {
       this.setState({ isMounted: true });
@@ -74,8 +79,13 @@ class AddProduct extends React.Component<any, any> {
     }
   };
 
-  handleCanMountCheckChange = () => {
+  handleCanMountCheckChange = (e?: any, state?: any) => {
     let checkbox = document.getElementById("canMountCheck") as HTMLInputElement;
+
+    if (state) {
+      checkbox.checked = true;
+      return this.setState({ canMount: true });
+    }
 
     if (checkbox.checked) {
       this.setState({ canMount: true });
@@ -157,21 +167,39 @@ class AddProduct extends React.Component<any, any> {
     this.setState({ item: item });
   };
 
-  addProduct = async (e: any) => {
+  editProduct = async (e: any, id: any) => {
     e.preventDefault();
 
-    const product = { ...this.state.item };
+    const item = { ...this.state.item };
+    const baseItem = JSON.parse(localStorage.getItem("product")!);
 
-    product.canMount = this.state.canMount;
-    product.isMounted = this.state.isMounted;
-    product.storage = +product.storage;
-    product.costPrice = +product.costPrice;
-    product.sellPrice = +product.sellPrice;
+    item.canMount = this.state.canMount;
+    item.isMounted = this.state.isMounted;
 
-    addProduct(product)
+    if (!item.isMounted) item.use = [];
+
+    delete item.updatedAt;
+    delete item.createdAt;
+    delete item.deletedAt;
+    delete item._id;
+
+    if (item.name === baseItem.name) delete item.name;
+    if (item.sellPrice === baseItem.sellPrice) delete item.sellPrice;
+    if (item.costPrice === baseItem.costPrice) delete item.costPrice;
+    if (item.category === baseItem.category) delete item.category;
+    if (item.canMount === baseItem.canMount) delete item.canMount;
+    if (item.isMounted === baseItem.isMounted) delete item.isMounted;
+    if (item.use === baseItem.use) delete item.use;
+    if (item.storage === baseItem.storage) delete item.storage;
+
+    if (Object.keys(item).length <= 0)
+      return toast.error("Nenhuma alteração identificada!");
+
+    editProduct(id, item)
       .then((res: any) => {
         toast.success(res.data.message);
 
+        localStorage.removeItem("product");
         this.setState({ redirectTo: "/storage" });
       })
       .catch((err: any) => {
@@ -203,7 +231,7 @@ class AddProduct extends React.Component<any, any> {
         <div className="content container d-flex justify-content-center">
           <div className="productForm col-6">
             <form
-              onSubmit={this.addProduct}
+              onSubmit={(e: any) => this.editProduct(e, this.state.item._id)}
               className="d-flex justify-content-center col-12"
             >
               <div className="col-8">
@@ -213,10 +241,8 @@ class AddProduct extends React.Component<any, any> {
                   className="nameInput col-12 ps-3 mb-4"
                   placeholder="Nome do produto"
                   onChange={this.handleItemChange}
-                  autoFocus
-                  required
+                  value={this.state.item.name ?? ""}
                 />
-
                 <div className="d-flex col-12 mb-4">
                   <div className="input-group">
                     <span className="holder input-group-text">R$</span>
@@ -226,7 +252,7 @@ class AddProduct extends React.Component<any, any> {
                       className="costPriceInput form-control col-12 ps-2"
                       placeholder="Preço Custo"
                       onChange={this.handleItemChange}
-                      required
+                      value={this.state.item.costPrice ?? ""}
                     />
                   </div>
 
@@ -238,25 +264,24 @@ class AddProduct extends React.Component<any, any> {
                       className="sellPriceInput form-control col-12 ps-2"
                       placeholder="Preço Venda"
                       onChange={this.handleItemChange}
-                      required
+                      value={this.state.item.sellPrice ?? ""}
                     />
                   </div>
                 </div>
-
                 <input
                   id="storageInput"
                   name="storage"
                   className="storageInput col-12 ps-3 mb-4"
                   placeholder="Estoque"
                   onChange={this.handleItemChange}
-                  required
+                  value={this.state.item.storage ?? ""}
                 />
-
                 <select
                   id="categoryInput"
                   name="category"
                   className="categoryInput col-12 ps-3 mb-4"
                   onChange={this.handleItemChange}
+                  value={this.state.item.category ?? ""}
                 >
                   <option>Categoria:</option>
                   <option value={"Cervejas"}>Cervejas</option>
@@ -268,7 +293,6 @@ class AddProduct extends React.Component<any, any> {
                   <option value={"Tabaco"}>Tabaco</option>
                   <option value={"Outros"}>Outros</option>
                 </select>
-
                 <div className="canMountArea d-flex align-items-center justify-content-center">
                   <input
                     type="checkbox"
@@ -279,7 +303,6 @@ class AddProduct extends React.Component<any, any> {
                     Pode montar outros produtos
                   </label>
                 </div>
-
                 <div className="canMountArea d-flex align-items-center justify-content-center">
                   <input
                     type="checkbox"
@@ -339,22 +362,26 @@ class AddProduct extends React.Component<any, any> {
                   </div>
                 )}
 
-                {this.state.item.use?.map((product: any) => (
-                  <div className="col-12 d-flex flex-column justify-content-center aling-itens-center">
-                    <span className="itemsLists d-flex justify-content-center col-12">
-                      {product.name} - qtd: {product.qtd}
-                      <i
-                        className="deleteButton d-flex justify-content-center align-items-center fa fa-trash col-2 ms-4 py-0"
-                        onClick={() => this.removeProduct(product._id)}
-                      />
-                    </span>
-                    <hr className="separatorLine col-12" />
-                  </div>
-                ))}
+                {this.state.isMounted &&
+                  this.state.item.use?.map((product: any) => (
+                    <div
+                      key={product._id}
+                      className="col-12 d-flex flex-column justify-content-center aling-itens-center"
+                    >
+                      <span className="itemsLists d-flex justify-content-center col-12">
+                        {product.name} - qtd: {product.qtd}
+                        <i
+                          className="deleteButton d-flex justify-content-center align-items-center fa fa-trash col-2 ms-4 py-0"
+                          onClick={() => this.removeProduct(product._id)}
+                        />
+                      </span>
+                      <hr className="separatorLine col-12" />
+                    </div>
+                  ))}
 
                 <div className="btns d-flex justify-content-center mb-4">
                   <button type="submit" className="btn btnAdd col-4 me-2">
-                    Adicionar
+                    Atualizar
                   </button>
                   <Link to="/storage" className="btn btnCancel col-4 me-2">
                     Cancelar
@@ -369,4 +396,4 @@ class AddProduct extends React.Component<any, any> {
   }
 }
 
-export default AddProduct;
+export default EditProduct;

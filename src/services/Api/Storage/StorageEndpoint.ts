@@ -50,6 +50,10 @@ export async function addProduct(params: any) {
   return await storageEndpoint.post("/add", params);
 }
 
+export async function editProduct(id: string, params: any) {
+  return await storageEndpoint.put(`/edit/${id}`, params);
+}
+
 export async function deleteProduct(id: string) {
   return await storageEndpoint.delete(`/delete/${id}`);
 }
