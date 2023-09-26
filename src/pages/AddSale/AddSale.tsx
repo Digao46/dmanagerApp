@@ -377,7 +377,7 @@ class AddSale extends React.Component<any, any> {
 
             <form
               onSubmit={this.addToCart}
-              className="d-flex justify-content-center align-items-center col-12"
+              className="d-flex justify-content-center mt-2 col-12"
             >
               <div className="col-8">
                 <input
@@ -477,7 +477,7 @@ class AddSale extends React.Component<any, any> {
                     <div className="itemPrices text-end me-1">
                       <span className="subtotal">Subtotal </span>= R$
                       <span className="totalValue">
-                        {product.total.toFixed(2)}
+                        {product.total.toFixed(2).replace(".", ",")}
                       </span>
                     </div>
                     <hr />

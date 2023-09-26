@@ -40,6 +40,16 @@ export async function findProductsByName(name: string, query: any) {
   return await storageEndpoint.get(`/name/${name}`, { params });
 }
 
+export async function findCanMountProducts(query: any) {
+  const params = new URLSearchParams(query);
+
+  return await storageEndpoint.get("/canMount", { params });
+}
+
+export async function addProduct(params: any) {
+  return await storageEndpoint.post("/add", params);
+}
+
 export async function deleteProduct(id: string) {
   return await storageEndpoint.delete(`/delete/${id}`);
 }

@@ -11,12 +11,16 @@ import AddSale from "../../pages/AddSale/AddSale";
 
 import Storage from "../../pages/Storage/Storage";
 import StorageTrash from "../../pages/StorageTrash/StorageTrash";
+import AddProduct from "../../pages/AddProduct/AddProduct";
 
 class Main extends React.Component<any, any> {
   render() {
     return (
       <main className="mt-4">
         <HashRouter basename="/">
+          <Route path="/storage/add" exact>
+            <AddProduct />
+          </Route>
           <Route path="/storage/trash" exact>
             <StorageTrash />
           </Route>

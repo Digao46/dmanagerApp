@@ -13,7 +13,7 @@ section {
     height: 90%;
 
     .productForm {
-      height: 40%;
+      height: 100%;
 
       h3 {
         color: var(--secondary);
@@ -186,8 +186,10 @@ section {
     }
 
     &:hover {
-      background-color: green !important;
-      color: var(--white) !important;
+      background-color: green;
+      color: var(--white);
+      font-weight: 600;
+
     }
   }
 }
