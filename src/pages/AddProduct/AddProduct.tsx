@@ -43,7 +43,7 @@ class AddProduct extends React.Component<any, any> {
   }
 
   componentDidMount(): void {
-    findCanMountProducts(this.state.productsQuery)
+    findCanMountProducts()
       .then((res: any) => {
         this.setState({ products: res.data.data.products });
       })

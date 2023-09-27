@@ -133,13 +133,18 @@ class Storage extends React.Component<any, any> {
   findProductsByName = async (productName: any, query: any, e?: any) => {
     if (e) e.preventDefault();
 
-    await findProductsByName(productName, query)
+    const newQuery = { ...query };
+    newQuery.page = 1;
+
+    await findProductsByName(productName, newQuery)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
           products: res.data.data.products,
           totalPages: pages,
+          query: newQuery,
+          isFiltered: true,
         });
       })
       .catch((err: any) => {
@@ -183,8 +188,10 @@ class Storage extends React.Component<any, any> {
   };
 
   handleChange = async (e: any) => {
-    if (this.state.products.length > 0)
+    if (this.state.isFiltered) {
       await this.findProducts(this.state.query);
+      this.setState({ isFiltered: false });
+    }
 
     handleChange(this, e);
   };

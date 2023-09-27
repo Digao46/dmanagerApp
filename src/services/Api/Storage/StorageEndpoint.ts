@@ -40,10 +40,8 @@ export async function findProductsByName(name: string, query: any) {
   return await storageEndpoint.get(`/name/${name}`, { params });
 }
 
-export async function findCanMountProducts(query: any) {
-  const params = new URLSearchParams(query);
-
-  return await storageEndpoint.get("/canMount", { params });
+export async function findCanMountProducts() {
+  return await storageEndpoint.get("/canMount");
 }
 
 export async function addProduct(params: any) {
