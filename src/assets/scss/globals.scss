@@ -68,3 +68,48 @@ html {
     animation: floating 2s infinite;
   }
 }
+
+.ant-picker-dropdown {
+  .ant-picker-header {
+    background-color: var(--primary-800) !important;
+    color: var(--secondary) !important;
+
+    button {
+      color: var(--secondary) !important;
+    }
+  }
+
+  .ant-picker-body {
+    background-color: var(--primary-800) !important;
+
+    table {
+      border: none;
+
+      th,
+      td {
+        background-color: var(--primary-500);
+        color: var(--secondary) !important;
+      }
+
+      .ant-picker-cell-disabled {
+        color: var(--primary-800) !important;
+      }
+
+      .ant-picker-cell-in-range,
+      .ant-picker-cell-range-start,
+      .ant-picker-cell-range-end {
+        background-color: var(--primary-500) !important;
+
+        &::after,
+        &::before {
+          background-color: var(--primary-800) !important;
+        }
+
+        .ant-picker-cell-inner {
+          background-color: var(--black) !important;
+          color: var(--secondary) !important;
+        }
+      }
+    }
+  }
+}
