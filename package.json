@@ -5,6 +5,7 @@
   "homepage": "https://Digao46.github.io/dn-smoke-bar/#/",
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
