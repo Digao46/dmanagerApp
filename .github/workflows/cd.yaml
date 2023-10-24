@@ -29,8 +29,8 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
+          git config --global user.email "digaodev46@gmail.com"
+          git config --global user.name "Digao46"
           npm run deploy
 
       # - name: Deploy to gh-pages

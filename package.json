@@ -2,6 +2,7 @@
   "name": "dn-smoke-bar",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://digao46.github.io/dn-smoke-bar/#/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
