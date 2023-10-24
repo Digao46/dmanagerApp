@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = process.env.REACT_APP_URL + "/clients";
+const url = process.env.REACT_APP_API_URL + "/clients";
 
 const clientsEndpoint = axios.create({
   baseURL: url,

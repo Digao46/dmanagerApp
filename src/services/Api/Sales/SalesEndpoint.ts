@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = process.env.REACT_APP_URL + "/sales";
+const url = process.env.REACT_APP_API_URL + "/sales";
 
 const salesEndpoint = axios.create({
   baseURL: url,

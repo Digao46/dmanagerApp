@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = process.env.REACT_APP_URL + "/storage";
+const url = process.env.REACT_APP_API_URL + "/storage";
 
 const storageEndpoint = axios.create({
   baseURL: url,
