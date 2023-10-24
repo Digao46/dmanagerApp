@@ -34,7 +34,7 @@ jobs:
           git config --global user.email "digaodev46@gmail.com"
           git config --global user.name "Digao46"
           git config credential.helper store
-          git push --set-upstream https://$GH_TOKEN@github.com/Digao46/dn-smoke-bar.git
+          git push --set-url origin https://$GH_TOKEN@github.com/Digao46/dn-smoke-bar.git
           git push --set-upstream origin main
           npm run deploy
 
