@@ -33,6 +33,8 @@ jobs:
         run: |
           git config --global user.email "digaodev46@gmail.com"
           git config --global user.name "Digao46"
+          git config credential.helper store
+          git push --set-upstream https://$GH_TOKEN@github.com/Digao46/dn-smoke-bar.git HEAD:main
           npm run deploy
 
       # - name: Deploy to gh-pages
