@@ -2,8 +2,10 @@
   "name": "dn-smoke-bar",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Digao46.github.io/dn-smoke-bar/#/",
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "antd": "^5.9.0",
@@ -21,18 +23,7 @@
   "devDependencies": {
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
-    "@types/react-router-dom": "^5.3.3"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "@types/react-router-dom": "^5.3.3",
+    "gh-pages": "^5.0.0"
   }
 }
