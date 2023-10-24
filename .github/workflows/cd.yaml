@@ -22,7 +22,7 @@ jobs:
           git config --global credential.helper store
 
       - name: Utilizar o PAT para autenticação
-        run: git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/Digao46/dn-smoke-bar.git
+        run: git remote set-url origin https://Digao46:${{ secrets.GITHUB_TOKEN }}@github.com/Digao46/dn-smoke-bar.git
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
