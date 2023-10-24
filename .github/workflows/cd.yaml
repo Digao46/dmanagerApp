@@ -34,6 +34,8 @@ jobs:
         run: npm ci
 
       - name: Building
+        env:
+          REACT_APP_URL: ${{ secrets.REACT_APP_URL }}
         run: npm run build
 
       - name: Deploy to GitHub Pages
