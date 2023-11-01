@@ -2,68 +2,54 @@ import React from "react";
 import { toast } from "react-hot-toast";
 
 import isAuthenticated from "../../services/Authentication/Authentication";
-import isAuthorizated from "../../services/Authorization/Authorization";
 
 import {
-  findDeletedProducts,
-  findProduct,
-  restoreProduct,
-} from "../../services/Api/Storage/StorageEndpoint";
+  findDeletedClients,
+  findClient,
+  restoreClient,
+} from "../../services/Api/Clients/ClientsEndpoint";
 
 import { nextPage, prevPage, goToPage } from "../../helpers/helpers";
 
 import Table from "../../components/Table/Table";
 
-import "./StorageTrash.scss";
+import "./CustomerTrash.scss";
 import { Redirect } from "react-router";
 
-class StorageTrash extends React.Component<any, any> {
+class ClientsTrash extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
     this.state = {
       // pagination
       perPage: [12, 25, 50, 100, 200],
-      totalPages: 0,
+      totalPages: 12,
       query: {
         limit: 12,
         page: 1,
-        orderBy: JSON.stringify([
-          { field: "category", direction: "asc" },
-          { field: "name", direction: "asc" },
-          { field: "deletedAt", direction: "asc" },
-        ]),
+        orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
         where: JSON.stringify({}),
       },
 
-      products: [],
-      product: {},
-      productName: "",
+      clients: [],
+      client: {},
+      clientName: "",
 
       content: [
-        { head: "Produto", field: "name", authorizated: true },
-        { head: "Categoria", field: "category", authorizated: true },
-        { head: "Estoque", field: "storage", authorizated: true },
-        { head: "Montado", field: "isMounted", authorizated: true },
+        { head: "Nome", field: "name", authorizated: true },
+        { head: "Celular", field: "cellphone", authorizated: true },
         {
-          head: "Preço Venda",
-          field: "sellPrice",
-          flag: "R$",
+          head: "Cliente desde:",
+          field: "createdAt",
+          type: "date",
           authorizated: true,
         },
-        {
-          head: "Preço Custo",
-          field: "costPrice",
-          flag: "R$",
-          authorizated: isAuthorizated(),
-        },
       ],
-
       actions: [
         {
           class: "restore",
           icon: "fa fa-trash-can-arrow-up",
-          func: this.restoreProduct,
+          func: this.restoreClient,
         },
       ],
 
@@ -77,16 +63,16 @@ class StorageTrash extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findDeletedProducts(this.state.query);
+    this.findDeletedClients(this.state.query);
   }
 
-  findDeletedProducts = async (query: any) => {
-    await findDeletedProducts(query)
+  findDeletedClients = async (query: any) => {
+    await findDeletedClients(query)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          products: res.data.data.products,
+          clients: res.data.data.clients,
           totalPages: pages,
         });
       })
@@ -102,7 +88,7 @@ class StorageTrash extends React.Component<any, any> {
         }
 
         this.setState({
-          products: [],
+          clients: [],
           totalPages: 1,
         });
 
@@ -110,10 +96,10 @@ class StorageTrash extends React.Component<any, any> {
       });
   };
 
-  findProduct = async (productId: string) => {
-    await findProduct(productId)
+  findClient = async (clientId: string) => {
+    await findClient(clientId)
       .then((res: any) => {
-        this.setState({ product: res.data.product });
+        this.setState({ client: res.data.client });
       })
       .catch((err: any) => {
         if (err.response.status === 401) {
@@ -126,24 +112,22 @@ class StorageTrash extends React.Component<any, any> {
           return;
         }
 
-        this.setState({
-          product: {},
-        });
+        this.setState({ client: {} });
 
         return toast.error(err.response.data.message);
       });
   };
 
-  restoreProduct = async (productId: string) => {
-    const newProducts = this.state.products.filter(
-      (product: any) => product._id !== productId
+  restoreClient = async (clientId: string) => {
+    const newClients = this.state.clients.filter(
+      (client: any) => client._id !== clientId
     );
 
-    if (window.confirm("Realmente deseja restaurar esse produto?")) {
-      await restoreProduct(productId)
+    if (window.confirm("Realmente deseja restaurar esse cliente?")) {
+      await restoreClient(clientId)
         .then((res: any) => {
           toast.success(res.data.message);
-          this.syncProductsAfterRestoring(newProducts);
+          this.syncClientsAfterRestoring(newClients);
         })
         .catch((err: any) => {
           if (err.response.status === 401) {
@@ -163,8 +147,8 @@ class StorageTrash extends React.Component<any, any> {
     return;
   };
 
-  syncProductsAfterRestoring = (newProducts: any) => {
-    this.setState({ products: newProducts });
+  syncClientsAfterRestoring = (newClients: any) => {
+    this.setState({ clients: newClients });
   };
 
   handleLimitChange = async (e: any) => {
@@ -177,25 +161,25 @@ class StorageTrash extends React.Component<any, any> {
 
     this.setState({ query: query });
 
-    await this.findDeletedProducts(query);
+    await this.findDeletedClients(query);
   };
 
   goToPage = async (e: any) => {
     e.preventDefault();
 
-    goToPage(this, this.findDeletedProducts, +e.target.textContent);
+    goToPage(this, this.findDeletedClients, +e.target.textContent);
   };
 
   previousPage = async (e: any) => {
     e.preventDefault();
 
-    prevPage(this, this.findDeletedProducts);
+    prevPage(this, this.findDeletedClients);
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
 
-    nextPage(this, this.findDeletedProducts);
+    nextPage(this, this.findDeletedClients);
   };
 
   render() {
@@ -209,7 +193,7 @@ class StorageTrash extends React.Component<any, any> {
           <div className="tableArea d-flex justify-content-center align-items-center my-2 col-12">
             <Table
               content={this.state.content}
-              data={this.state.products}
+              data={this.state.clients}
               actions={this.state.actions}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
@@ -224,4 +208,4 @@ class StorageTrash extends React.Component<any, any> {
   }
 }
 
-export default StorageTrash;
+export default ClientsTrash;

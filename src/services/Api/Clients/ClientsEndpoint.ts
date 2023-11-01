@@ -23,3 +23,27 @@ export async function findClients(query: any) {
 
   return await clientsEndpoint.get("/", { params });
 }
+
+export async function findDeletedClients(query: any) {
+  const params = new URLSearchParams(query);
+
+  return await clientsEndpoint.get("/trash", { params });
+}
+
+export async function findClient(id: string) {
+  return await clientsEndpoint.get(`/${id}`);
+}
+
+export async function findClientsByName(name: string, query: any) {
+  const params = new URLSearchParams(query);
+
+  return await clientsEndpoint.get(`/name/${name}`, { params });
+}
+
+export async function deleteClient(id: string) {
+  return await clientsEndpoint.delete(`/delete/${id}`);
+}
+
+export async function restoreClient(id: string) {
+  return await clientsEndpoint.put(`/restore/${id}`);
+}

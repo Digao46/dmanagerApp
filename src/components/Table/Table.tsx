@@ -42,6 +42,40 @@ class Table extends React.Component<any, any> {
     return elements;
   };
 
+  verifyType = (data: any, tData: any) => {
+    if (typeof data[tData.field] == "boolean") {
+      return tData.field ? "Sim" : "Não";
+    }
+
+    if (typeof data[tData.field] == "number") {
+      if (tData.type == "currency") {
+        return data[tData.field].toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+      }
+
+      return data[tData.field] + " uni";
+    }
+
+    if (typeof data[tData.field] == "string") {
+      if (tData.type == "date") {
+        const date = new Date(data[tData.field]);
+
+        const newDate = `
+        ${date.getDay() < 10 ? "0" + date.getDay() : date.getDay()}
+        /
+        ${date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth()}
+        /
+        ${date.getFullYear()}`;
+
+        return newDate;
+      }
+    }
+
+    return data[tData.field];
+  };
+
   render() {
     return (
       <table className="table-bordered col-10">
@@ -67,23 +101,7 @@ class Table extends React.Component<any, any> {
                 (td: any, key: any) =>
                   td.authorizated && (
                     <td key={key} scope="col">
-                      {
-                        //   Verificando se é boolean
-                        typeof data[td.field] == "boolean"
-                          ? //   Verificando o resultado do dado para mostrar "Sim" ou "Não"
-                            data[td.field]
-                            ? "Sim"
-                            : "Não"
-                          : //   Verificando se é number
-                          typeof data[td.field] == "number"
-                          ? //   Verificando se existe flag para adicionar antes do dado
-                            td.flag
-                            ? td.flag +
-                              data[td.field].toFixed(2).replace(".", ",")
-                            : data[td.field] + " uni"
-                          : //   Caso não seja nenhum desses, ele simplesmente imprime o dado
-                            data[td.field]
-                      }
+                      {this.verifyType(data, td)}
                     </td>
                   )
               )}
@@ -95,7 +113,9 @@ class Table extends React.Component<any, any> {
                       <button
                         key={key}
                         className="btn"
-                        onClick={() => {action.func(data._id)}}
+                        onClick={() => {
+                          action.func(data._id);
+                        }}
                       >
                         <i className={`${action.class} ${action.icon}`} />
                       </button>

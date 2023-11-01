@@ -32,11 +32,10 @@ class SaleCard extends React.Component<any, any> {
   deleteSale(id: string) {
     const newSales = this.props.sales.filter((sale: any) => sale._id !== id);
 
-    this.props.sync(newSales);
-
     deleteSale(id)
       .then((res) => {
         toast.success(res.data.message);
+        this.props.sync(newSales);
       })
       .catch((err: any) => {
         if (err.response.status === 401) {

@@ -3,12 +3,13 @@ import { toast } from "react-hot-toast";
 
 import isAuthenticated from "../../services/Authentication/Authentication";
 import isAuthorizated from "../../services/Authorization/Authorization";
+
 import {
-  findProducts,
-  findProduct,
-  findProductsByName,
-  deleteProduct,
-} from "../../services/Api/Storage/StorageEndpoint";
+  findClients,
+  findClient,
+  findClientsByName,
+  deleteClient,
+} from "../../services/Api/Clients/ClientsEndpoint";
 
 import {
   nextPage,
@@ -19,10 +20,10 @@ import {
 
 import Table from "../../components/Table/Table";
 
-import "./Storage.scss";
+import "./Customer.scss";
 import { Redirect } from "react-router";
 
-class Storage extends React.Component<any, any> {
+class Clients extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
@@ -33,46 +34,34 @@ class Storage extends React.Component<any, any> {
       query: {
         limit: 12,
         page: 1,
-        orderBy: JSON.stringify([
-          { field: "category", direction: "asc" },
-          { field: "name", direction: "asc" },
-        ]),
+        orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
         where: JSON.stringify({}),
       },
 
-      products: [],
-      product: {},
-      productName: "",
+      clients: [],
+      client: {},
+      clientName: "",
 
       content: [
-        { head: "Produto", field: "name", authorizated: true },
-        { head: "Categoria", field: "category", authorizated: true },
-        { head: "Estoque", field: "storage", authorizated: true },
-        { head: "Montado", field: "isMounted", authorizated: true },
+        { head: "Nome", field: "name", authorizated: true },
+        { head: "Celular", field: "cellphone", authorizated: true },
         {
-          head: "Preço Venda",
-          field: "sellPrice",
-          type: "currency",
+          head: "Cliente desde:",
+          field: "createdAt",
+          type: "date",
           authorizated: true,
         },
-        {
-          head: "Preço Custo",
-          field: "costPrice",
-          type: "currency",
-          authorizated: isAuthorizated(),
-        },
       ],
-
       actions: [
         {
           class: "edit",
           icon: "fa fa-edit",
-          func: this.findProduct,
+          func: this.findClient,
         },
         {
           class: "delete",
           icon: "fa fa-trash-can",
-          func: this.deleteProduct,
+          func: this.deleteClient,
         },
       ],
 
@@ -88,16 +77,16 @@ class Storage extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findProducts(this.state.query);
+    this.findClients(this.state.query);
   }
 
-  findProducts = async (query: any) => {
-    await findProducts(query)
+  findClients = async (query: any) => {
+    await findClients(query)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          products: res.data.data.products,
+          clients: res.data.data.clients,
           totalPages: pages,
         });
       })
@@ -113,7 +102,7 @@ class Storage extends React.Component<any, any> {
         }
 
         this.setState({
-          products: [],
+          clients: [],
           totalPages: 1,
         });
 
@@ -121,15 +110,12 @@ class Storage extends React.Component<any, any> {
       });
   };
 
-  findProduct = async (productId: string) => {
-    await findProduct(productId)
+  findClient = async (clientId: string) => {
+    await findClient(clientId)
       .then((res: any) => {
-        localStorage.setItem("product", JSON.stringify(res.data.product));
+        localStorage.setItem("client", JSON.stringify(res.data.client));
 
-        this.setState({
-          product: res.data.product,
-          redirectTo: "/storage/edit",
-        });
+        this.setState({ client: res.data.client, redirectTo: "/clients/edit" });
       })
       .catch((err: any) => {
         if (err.response.status === 401) {
@@ -142,22 +128,26 @@ class Storage extends React.Component<any, any> {
           return;
         }
 
+        this.setState({
+          client: {},
+        });
+
         return toast.error(err.response.data.message);
       });
   };
 
-  findProductsByName = async (productName: string, query: any, e?: any) => {
+  findClientsByName = async (clientName: string, query: any, e?: any) => {
     if (e) e.preventDefault();
 
     const newQuery = { ...query };
     newQuery.page = 1;
 
-    await findProductsByName(productName, newQuery)
+    await findClientsByName(clientName, newQuery)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          products: res.data.data.products,
+          clients: res.data.data.clients,
           totalPages: pages,
           query: newQuery,
           isFiltered: true,
@@ -175,7 +165,7 @@ class Storage extends React.Component<any, any> {
         }
 
         this.setState({
-          products: [],
+          clients: [],
           totalPages: 1,
           isFiltered: true,
         });
@@ -184,16 +174,16 @@ class Storage extends React.Component<any, any> {
       });
   };
 
-  deleteProduct = async (productId: string) => {
-    const newProducts = this.state.products.filter(
-      (product: any) => product._id !== productId
+  deleteClient = async (clientId: string) => {
+    const newClients = this.state.clients.filter(
+      (client: any) => client._id !== clientId
     );
 
-    if (window.confirm("Realmente deseja excluir esse produto?")) {
-      await deleteProduct(productId)
+    if (window.confirm("Realmente deseja excluir esse cliente?")) {
+      await deleteClient(clientId)
         .then((res: any) => {
           toast.success(res.data.message);
-          this.syncProductsAfterDeleting(newProducts);
+          this.syncClientsAfterDeleting(newClients);
         })
         .catch((err: any) => {
           if (err.response.status === 401) {
@@ -209,17 +199,15 @@ class Storage extends React.Component<any, any> {
           return toast.error(err.response.data.message);
         });
     }
-
-    return;
   };
 
-  syncProductsAfterDeleting = (newProducts: any) => {
-    this.setState({ products: newProducts });
+  syncClientsAfterDeleting = (newClients: any) => {
+    this.setState({ clients: newClients });
   };
 
   handleChange = async (e: any) => {
     if (this.state.isFiltered) {
-      await this.findProducts(this.state.query);
+      await this.findClients(this.state.query);
       this.setState({ isFiltered: false });
     }
 
@@ -237,43 +225,41 @@ class Storage extends React.Component<any, any> {
     this.setState({ query: query });
 
     if (this.state.isFiltered) {
-      this.findProductsByName(this.state.productName, this.state.query, e);
+      this.findClientsByName(this.state.clientName, this.state.query, e);
     } else {
-      await this.findProducts(query);
+      await this.findClients(query);
     }
   };
 
   goToPage = async (e: any) => {
     e.preventDefault();
-
     if (this.state.isFiltered) {
       goToPage(
         this,
-        this.findProductsByName,
+        this.findClientsByName,
         +e.target.textContent,
-        this.state.productName
+        this.state.clientName
       );
     } else {
-      goToPage(this, this.findProducts, +e.target.textContent);
+      goToPage(this, this.findClients, +e.target.textContent);
     }
   };
 
   previousPage = async (e: any) => {
     e.preventDefault();
     if (this.state.isFiltered) {
-      prevPage(this, this.findProductsByName, this.state.productName);
+      prevPage(this, this.findClientsByName, this.state.clientName);
     } else {
-      prevPage(this, this.findProducts);
+      prevPage(this, this.findClients);
     }
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
-
     if (this.state.isFiltered) {
-      nextPage(this, this.findProductsByName, this.state.productName);
+      nextPage(this, this.findClientsByName, this.state.clientName);
     } else {
-      nextPage(this, this.findProducts);
+      nextPage(this, this.findClients);
     }
   };
 
@@ -285,12 +271,12 @@ class Storage extends React.Component<any, any> {
     return (
       <section className="container d-flex justify-content-center col-12">
         <div className="container d-flex align-items-center flex-column">
-          <div className="formProductArea container d-flex justify-content-center align-items-center mb-2">
+          <div className="formClientArea container d-flex justify-content-center align-items-center mb-2">
             <form
               className="d-flex justify-content-center align-itens-center"
               onSubmit={(e) =>
-                this.findProductsByName(
-                  this.state.productName,
+                this.findClientsByName(
+                  this.state.clientName,
                   this.state.query,
                   e
                 )
@@ -299,10 +285,10 @@ class Storage extends React.Component<any, any> {
               <input
                 type="text"
                 onChange={this.handleChange}
-                name="productName"
-                id="productInput"
-                className="selectProduct col-6 me-2 px-4 py-1"
-                placeholder="Pesquisar produto"
+                name="clientName"
+                id="clientInput"
+                className="selectClient col-6 me-2 px-4 py-1"
+                placeholder="Pesquisar cliente"
                 required
               />
 
@@ -318,7 +304,7 @@ class Storage extends React.Component<any, any> {
           <div className="tableArea d-flex justify-content-center align-items-center my-2 col-12">
             <Table
               content={this.state.content}
-              data={this.state.products}
+              data={this.state.clients}
               actions={this.state.actions}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
@@ -333,4 +319,4 @@ class Storage extends React.Component<any, any> {
   }
 }
 
-export default Storage;
+export default Clients;

@@ -71,3 +71,28 @@ export const goToPage = async (
 
   await func(query);
 };
+
+export const checkObjectsEquality = (
+  object1: any,
+  object2: any,
+  fields: string[]
+) => {
+  let equal: boolean = true;
+
+  if (object1.length !== object2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < object1.length; i++) {
+    const element1 = object1[i];
+    const element2 = object2[i];
+
+    fields.forEach((field: string) => {
+      if (element1[field] !== element2[field] && equal) {
+        equal = false;
+      }
+    });
+  }
+
+  return equal;
+};

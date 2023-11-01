@@ -2,6 +2,8 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
+import { checkObjectsEquality } from "../../helpers/helpers";
+
 import {
   findCanMountProducts,
   editProduct,
@@ -183,14 +185,16 @@ class EditProduct extends React.Component<any, any> {
     delete item.deletedAt;
     delete item._id;
 
-    if (item.name === baseItem.name) delete item.name;
-    if (item.sellPrice === baseItem.sellPrice) delete item.sellPrice;
-    if (item.costPrice === baseItem.costPrice) delete item.costPrice;
-    if (item.category === baseItem.category) delete item.category;
-    if (item.canMount === baseItem.canMount) delete item.canMount;
-    if (item.isMounted === baseItem.isMounted) delete item.isMounted;
-    if (item.use === baseItem.use) delete item.use;
-    if (item.storage === baseItem.storage) delete item.storage;
+    if (item.name == baseItem.name) delete item.name;
+    if (item.sellPrice == baseItem.sellPrice) delete item.sellPrice;
+    if (item.costPrice == baseItem.costPrice) delete item.costPrice;
+    if (item.category == baseItem.category) delete item.category;
+    if (item.canMount == baseItem.canMount) delete item.canMount;
+    if (item.isMounted == baseItem.isMounted) delete item.isMounted;
+    if (item.storage == baseItem.storage) delete item.storage;
+
+    if (checkObjectsEquality(item.use, baseItem.use, ["_id", "name", "qtd"]))
+      delete item.use;
 
     if (Object.keys(item).length <= 0)
       return toast.error("Nenhuma alteração identificada!");
