@@ -40,6 +40,14 @@ export async function findClientsByName(name: string, query: any) {
   return await clientsEndpoint.get(`/name/${name}`, { params });
 }
 
+export async function addClient(params: any) {
+  return await clientsEndpoint.post("/add", params);
+}
+
+export async function editClient(id: string, params: any) {
+  return await clientsEndpoint.put(`/edit/${id}`, params);
+}
+
 export async function deleteClient(id: string) {
   return await clientsEndpoint.delete(`/delete/${id}`);
 }

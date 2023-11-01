@@ -185,13 +185,13 @@ class EditProduct extends React.Component<any, any> {
     delete item.deletedAt;
     delete item._id;
 
-    if (item.name == baseItem.name) delete item.name;
-    if (item.sellPrice == baseItem.sellPrice) delete item.sellPrice;
-    if (item.costPrice == baseItem.costPrice) delete item.costPrice;
-    if (item.category == baseItem.category) delete item.category;
-    if (item.canMount == baseItem.canMount) delete item.canMount;
-    if (item.isMounted == baseItem.isMounted) delete item.isMounted;
-    if (item.storage == baseItem.storage) delete item.storage;
+    if (item.name === baseItem.name) delete item.name;
+    if (item.sellPrice === baseItem.sellPrice) delete item.sellPrice;
+    if (item.costPrice === baseItem.costPrice) delete item.costPrice;
+    if (item.category === baseItem.category) delete item.category;
+    if (item.canMount === baseItem.canMount) delete item.canMount;
+    if (item.isMounted === baseItem.isMounted) delete item.isMounted;
+    if (item.storage === baseItem.storage) delete item.storage;
 
     if (checkObjectsEquality(item.use, baseItem.use, ["_id", "name", "qtd"]))
       delete item.use;
@@ -227,9 +227,9 @@ class EditProduct extends React.Component<any, any> {
     }
 
     return (
-      <section className="addSale container d-flex flex-column align-items-center">
+      <section className="container d-flex flex-column align-items-center">
         <div className="title d-flex justify-content-center align-items-center">
-          <h1> Adicionar Produto </h1>
+          <h1> Editar Produto </h1>
         </div>
 
         <div className="content container d-flex justify-content-center">

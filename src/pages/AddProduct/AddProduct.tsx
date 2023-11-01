@@ -195,7 +195,7 @@ class AddProduct extends React.Component<any, any> {
     }
 
     return (
-      <section className="addSale container d-flex flex-column align-items-center">
+      <section className="container d-flex flex-column align-items-center">
         <div className="title d-flex justify-content-center align-items-center">
           <h1> Adicionar Produto </h1>
         </div>
