@@ -71,6 +71,18 @@ class Table extends React.Component<any, any> {
 
         return newDate;
       }
+
+      if (tData.type == "phone") {
+        const number = data[tData.field].replace(/\D/g, "");
+
+        if (number.length === 9) {
+          return `${number.substring(0, 5)}-${number.substring(5)}`;
+        } else if (number.length === 11) {
+          return `(${number.substring(0, 2)}) ${number.substring(2, 7)}-${number.substring(7)}`;
+        } else {
+          return 'Telefone inválido';
+        }
+      }
     }
 
     return data[tData.field];

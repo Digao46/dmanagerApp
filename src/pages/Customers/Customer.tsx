@@ -44,7 +44,12 @@ class Clients extends React.Component<any, any> {
 
       content: [
         { head: "Nome", field: "name", authorizated: true },
-        { head: "Celular", field: "cellphone", authorizated: true },
+        {
+          head: "Celular",
+          field: "cellphone",
+          type: "phone",
+          authorizated: true,
+        },
         {
           head: "Cliente desde:",
           field: "createdAt",

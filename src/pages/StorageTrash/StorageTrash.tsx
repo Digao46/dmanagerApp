@@ -48,13 +48,13 @@ class StorageTrash extends React.Component<any, any> {
         {
           head: "Preço Venda",
           field: "sellPrice",
-          flag: "R$",
+          type: "currency",
           authorizated: true,
         },
         {
           head: "Preço Custo",
           field: "costPrice",
-          flag: "R$",
+          type: "currency",
           authorizated: isAuthorizated(),
         },
       ],
