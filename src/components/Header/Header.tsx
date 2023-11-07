@@ -96,13 +96,11 @@ class Header extends React.Component<any, any> {
                     </Link>
                   </li>
 
-                  {isAuthorizated() && (
-                    <li className="dropdown-item d-flex align-items-center">
-                      <Link to="/storage/trash" className="ms-2">
-                        <i className="fa fa-trash me-1" /> Excluídos
-                      </Link>
-                    </li>
-                  )}
+                  <li className="dropdown-item d-flex align-items-center">
+                    <Link to="/storage/trash" className="ms-2">
+                      <i className="fa fa-trash me-1" /> Excluídos
+                    </Link>
+                  </li>
 
                   <li className="dropdown-item d-flex align-items-center">
                     <Link to="/storage" className="ms-2">
@@ -145,6 +143,14 @@ class Header extends React.Component<any, any> {
                     <li className="dropdown-item d-flex align-items-center">
                       <Link to="/users/add" className="ms-2">
                         <i className="fa fa-plus me-1" /> Novo Usuário
+                      </Link>
+                    </li>
+                  )}
+
+                  {isAuthorizated() && (
+                    <li className="dropdown-item d-flex align-items-center">
+                      <Link to="/users/trash" className="ms-2">
+                        <i className="fa fa-trash-can me-1" /> Excluídos
                       </Link>
                     </li>
                   )}
@@ -202,17 +208,19 @@ class Header extends React.Component<any, any> {
                 </ul>
               </li>
 
-              <li className="d-flex justify-content-center align-items-center col-1 px-5">
-                <Link
-                  to="/cash"
-                  className="d-flex justify-content-center align-items-center"
-                >
-                  <span className="iconArea d-flex justify-content-center align-items-center me-1">
-                    <i className="fa fa-cash-register" />
-                  </span>
-                  Caixa
-                </Link>
-              </li>
+              {isAuthorizated() && (
+                <li className="d-flex justify-content-center align-items-center col-1 px-5">
+                  <Link
+                    to="/cash"
+                    className="d-flex justify-content-center align-items-center"
+                  >
+                    <span className="iconArea d-flex justify-content-center align-items-center me-1">
+                      <i className="fa fa-cash-register" />
+                    </span>
+                    Caixa
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 

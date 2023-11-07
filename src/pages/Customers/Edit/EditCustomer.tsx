@@ -2,9 +2,9 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { editClient } from "../../services/Api/Clients/ClientsEndpoint";
+import { editClient } from "../../../services/Api/Clients/ClientsEndpoint";
 
-// import "./EditCostumer.scss";
+import "./EditCustomer.scss";
 
 class EditClient extends React.Component<any, any> {
   constructor(props: any) {

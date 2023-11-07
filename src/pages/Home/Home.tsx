@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router";
 
 import isAuthenticated from "../../services/Authentication/Authentication";
+import isAuthorizated from "../../services/Authorization/Authorization";
 
 import HomeCard from "../../components/HomeCard/HomeCard";
 
@@ -37,12 +38,14 @@ class Home extends React.Component<any, any> {
           icon={"fa fa-warehouse"}
           class={"storage"}
         />
-        <HomeCard
-          title={"Caixa"}
-          link={"/cash"}
-          icon={"fa fa-cash-register"}
-          class={"cash"}
-        />
+        {isAuthorizated() && (
+          <HomeCard
+            title={"Caixa"}
+            link={"/cash"}
+            icon={"fa fa-cash-register"}
+            class={"cash"}
+          />
+        )}
       </section>
     );
   }

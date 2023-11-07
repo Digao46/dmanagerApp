@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import {
   findCanMountProducts,
   addProduct,
-} from "../../services/Api/Storage/StorageEndpoint";
+} from "../../../services/Api/Storage/StorageEndpoint";
 
 import "./AddProduct.scss";
 

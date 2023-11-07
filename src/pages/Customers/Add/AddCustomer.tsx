@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { addClient } from "../../services/Api/Clients/ClientsEndpoint";
+import { addClient } from "../../../services/Api/Clients/ClientsEndpoint";
 
 import "./AddCustomer.scss";
 

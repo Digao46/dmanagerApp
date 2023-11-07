@@ -44,7 +44,7 @@ class Table extends React.Component<any, any> {
 
   verifyType = (data: any, tData: any) => {
     if (typeof data[tData.field] == "boolean") {
-      return tData.field ? "Sim" : "Não";
+      return data[tData.field] ? "Sim" : "Não";
     }
 
     if (typeof data[tData.field] == "number") {
@@ -78,9 +78,12 @@ class Table extends React.Component<any, any> {
         if (number.length === 9) {
           return `${number.substring(0, 5)}-${number.substring(5)}`;
         } else if (number.length === 11) {
-          return `(${number.substring(0, 2)}) ${number.substring(2, 7)}-${number.substring(7)}`;
+          return `(${number.substring(0, 2)}) ${number.substring(
+            2,
+            7
+          )}-${number.substring(7)}`;
         } else {
-          return 'Telefone inválido';
+          return "Telefone inválido";
         }
       }
     }
@@ -102,7 +105,7 @@ class Table extends React.Component<any, any> {
                 )
             )}
 
-            <th>Ações</th>
+            {isAuthorizated() && <th>Ações</th>}
           </tr>
         </thead>
 

@@ -2,12 +2,12 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { findClients } from "../../services/Api/Clients/ClientsEndpoint";
+import { findClients } from "../../../services/Api/Clients/ClientsEndpoint";
 import {
   findProduct,
   findProducts,
-} from "../../services/Api/Storage/StorageEndpoint";
-import { addSale } from "../../services/Api/Sales/SalesEndpoint";
+} from "../../../services/Api/Storage/StorageEndpoint";
+import { addSale } from "../../../services/Api/Sales/SalesEndpoint";
 
 import "./AddSale.scss";
 

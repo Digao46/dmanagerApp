@@ -2,12 +2,12 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { checkObjectsEquality } from "../../helpers/helpers";
+import { checkObjectsEquality } from "../../../helpers/helpers";
 
 import {
   findCanMountProducts,
   editProduct,
-} from "../../services/Api/Storage/StorageEndpoint";
+} from "../../../services/Api/Storage/StorageEndpoint";
 
 import "./EditProduct.scss";
 

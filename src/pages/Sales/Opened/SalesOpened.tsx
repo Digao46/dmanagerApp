@@ -6,15 +6,15 @@ import {
   closeSale,
   findSalesOpened,
   findSalesOpenedByClientId,
-} from "../../services/Api/Sales/SalesEndpoint";
-import { findClients } from "../../services/Api/Clients/ClientsEndpoint";
+} from "../../../services/Api/Sales/SalesEndpoint";
+import { findClients } from "../../../services/Api/Clients/ClientsEndpoint";
 
-import isAuthenticated from "../../services/Authentication/Authentication";
+import isAuthenticated from "../../../services/Authentication/Authentication";
 
-import SaleCard from "../../components/SaleCard/SaleCard";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import SaleCard from "../../../components/SaleCard/SaleCard";
+import ProductCard from "../../../components/ProductCard/ProductCard";
 
-import { nextPage, prevPage } from "../../helpers/helpers";
+import { nextPage, prevPage } from "../../../helpers/helpers";
 
 import "./SalesOpened.scss";
 import { Redirect } from "react-router";

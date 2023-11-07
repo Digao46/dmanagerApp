@@ -5,11 +5,11 @@ import isAuthenticated from "../../services/Authentication/Authentication";
 import isAuthorizated from "../../services/Authorization/Authorization";
 
 import {
-  findClients,
-  findClient,
-  findClientsByName,
-  deleteClient,
-} from "../../services/Api/Clients/ClientsEndpoint";
+  deleteUser,
+  findUser,
+  findUsers,
+  findUsersByName,
+} from "../../services/Api/Users/UsersEndpoint";
 
 import {
   nextPage,
@@ -20,10 +20,10 @@ import {
 
 import Table from "../../components/Table/Table";
 
-import "./Customer.scss";
+import "./Users.scss";
 import { Redirect } from "react-router";
 
-class Clients extends React.Component<any, any> {
+class Users extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
@@ -38,35 +38,35 @@ class Clients extends React.Component<any, any> {
         where: JSON.stringify({}),
       },
 
-      clients: [],
-      client: {},
-      clientName: "",
+      users: [],
+      user: {},
+      userName: "",
 
       content: [
-        { head: "Nome", field: "name", authorizated: true },
         {
-          head: "Celular",
-          field: "cellphone",
-          type: "phone",
-          authorizated: true,
+          head: "Nome de Usuário",
+          field: "username",
+          authorizated: isAuthorizated(),
         },
+        { head: "Nome", field: "name", authorizated: isAuthorizated() },
+        { head: "Admin", field: "isAdmin", authorizated: isAuthorizated() },
         {
-          head: "Cliente desde:",
+          head: "Membro desde:",
           field: "createdAt",
           type: "date",
-          authorizated: true,
+          authorizated: isAuthorizated(),
         },
       ],
       actions: [
         {
           class: "edit",
           icon: "fa fa-edit",
-          func: this.findClient,
+          func: this.findUser,
         },
         {
           class: "delete",
           icon: "fa fa-trash-can",
-          func: this.deleteClient,
+          func: this.deleteUser,
         },
       ],
 
@@ -82,16 +82,16 @@ class Clients extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findClients(this.state.query);
+    this.findUsers(this.state.query);
   }
 
-  findClients = async (query: any) => {
-    await findClients(query)
+  findUsers = async (query: any) => {
+    await findUsers(query)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          clients: res.data.data.clients,
+          users: res.data.data.users,
           totalPages: pages,
         });
       })
@@ -107,7 +107,7 @@ class Clients extends React.Component<any, any> {
         }
 
         this.setState({
-          clients: [],
+          users: [],
           totalPages: 1,
         });
 
@@ -115,44 +115,44 @@ class Clients extends React.Component<any, any> {
       });
   };
 
-  findClient = async (clientId: string) => {
-    await findClient(clientId)
+  findUser = async (userId: string) => {
+    await findUser(userId)
       .then((res: any) => {
-        localStorage.setItem("client", JSON.stringify(res.data.client));
+        const user = res.data.user;
+        delete user.password;
 
-        this.setState({ client: res.data.client, redirectTo: "/clients/edit" });
+        localStorage.setItem("selectedUser", JSON.stringify(res.data.user));
+
+        this.setState({ user: user, redirectTo: "/users/edit" });
       })
       .catch((err: any) => {
         if (err.response.status === 401) {
           toast.error(err.response.data.message);
-
           this.setState({ redirectTo: "/login" });
-
           localStorage.removeItem("user");
-
           return;
         }
 
         this.setState({
-          client: {},
+          user: {},
         });
 
         return toast.error(err.response.data.message);
       });
   };
 
-  findClientsByName = async (clientName: string, query: any, e?: any) => {
+  findUsersByName = async (userName: string, query: any, e?: any) => {
     if (e) e.preventDefault();
 
     const newQuery = { ...query };
     newQuery.page = 1;
 
-    await findClientsByName(clientName, newQuery)
+    await findUsersByName(userName, newQuery)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          clients: res.data.data.clients,
+          users: res.data.data.users,
           totalPages: pages,
           query: newQuery,
           isFiltered: true,
@@ -170,7 +170,7 @@ class Clients extends React.Component<any, any> {
         }
 
         this.setState({
-          clients: [],
+          users: [],
           totalPages: 1,
           isFiltered: true,
         });
@@ -179,25 +179,22 @@ class Clients extends React.Component<any, any> {
       });
   };
 
-  deleteClient = async (clientId: string) => {
-    const newClients = this.state.clients.filter(
-      (client: any) => client._id !== clientId
+  deleteUser = async (userId: string) => {
+    const newUsers = this.state.users.filter(
+      (user: any) => user._id !== userId
     );
 
-    if (window.confirm("Realmente deseja excluir esse cliente?")) {
-      await deleteClient(clientId)
+    if (window.confirm("Realmente deseja excluir esse usuário?")) {
+      await deleteUser(userId)
         .then((res: any) => {
           toast.success(res.data.message);
-          this.syncClientsAfterDeleting(newClients);
+          this.syncUsersAfterDeleting(newUsers);
         })
         .catch((err: any) => {
           if (err.response.status === 401) {
             toast.error(err.response.data.message);
-
             this.setState({ redirectTo: "/login" });
-
             localStorage.removeItem("user");
-
             return;
           }
 
@@ -206,13 +203,13 @@ class Clients extends React.Component<any, any> {
     }
   };
 
-  syncClientsAfterDeleting = (newClients: any) => {
-    this.setState({ clients: newClients });
+  syncUsersAfterDeleting = (newUsers: any) => {
+    this.setState({ users: newUsers });
   };
 
   handleChange = async (e: any) => {
     if (this.state.isFiltered) {
-      await this.findClients(this.state.query);
+      await this.findUsers(this.state.query);
       this.setState({ isFiltered: false });
     }
 
@@ -230,9 +227,9 @@ class Clients extends React.Component<any, any> {
     this.setState({ query: query });
 
     if (this.state.isFiltered) {
-      this.findClientsByName(this.state.clientName, this.state.query, e);
+      this.findUsersByName(this.state.userName, this.state.query, e);
     } else {
-      await this.findClients(query);
+      await this.findUsers(query);
     }
   };
 
@@ -241,30 +238,30 @@ class Clients extends React.Component<any, any> {
     if (this.state.isFiltered) {
       goToPage(
         this,
-        this.findClientsByName,
+        this.findUsersByName,
         +e.target.textContent,
-        this.state.clientName
+        this.state.userName
       );
     } else {
-      goToPage(this, this.findClients, +e.target.textContent);
+      goToPage(this, this.findUsers, +e.target.textContent);
     }
   };
 
   previousPage = async (e: any) => {
     e.preventDefault();
     if (this.state.isFiltered) {
-      prevPage(this, this.findClientsByName, this.state.clientName);
+      prevPage(this, this.findUsersByName, this.state.userName);
     } else {
-      prevPage(this, this.findClients);
+      prevPage(this, this.findUsers);
     }
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
     if (this.state.isFiltered) {
-      nextPage(this, this.findClientsByName, this.state.clientName);
+      nextPage(this, this.findUsersByName, this.state.userName);
     } else {
-      nextPage(this, this.findClients);
+      nextPage(this, this.findUsers);
     }
   };
 
@@ -276,24 +273,20 @@ class Clients extends React.Component<any, any> {
     return (
       <section className="container d-flex justify-content-center col-12">
         <div className="container d-flex align-items-center flex-column">
-          <div className="formClientArea container d-flex justify-content-center align-items-center mb-2">
+          <div className="formUserArea container d-flex justify-content-center align-items-center mb-2">
             <form
               className="d-flex justify-content-center align-itens-center"
               onSubmit={(e) =>
-                this.findClientsByName(
-                  this.state.clientName,
-                  this.state.query,
-                  e
-                )
+                this.findUsersByName(this.state.userName, this.state.query, e)
               }
             >
               <input
                 type="text"
                 onChange={this.handleChange}
-                name="clientName"
-                id="clientInput"
-                className="selectClient col-6 me-2 px-4 py-1"
-                placeholder="Pesquisar cliente"
+                name="userName"
+                id="userInput"
+                className="selectUser col-6 me-2 px-4 py-1"
+                placeholder="Pesquisar usuário"
                 required
               />
 
@@ -309,7 +302,7 @@ class Clients extends React.Component<any, any> {
           <div className="tableArea d-flex justify-content-center align-items-center my-2 col-12">
             <Table
               content={this.state.content}
-              data={this.state.clients}
+              data={this.state.users}
               actions={this.state.actions}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
@@ -324,4 +317,4 @@ class Clients extends React.Component<any, any> {
   }
 }
 
-export default Clients;
+export default Users;

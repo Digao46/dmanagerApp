@@ -1,5 +1,6 @@
 table {
-  height: 80%;
+  height: 20%;
+  max-height: 80%;
 
   background-color: var(--primary-800);
   color: var(--white);
@@ -15,6 +16,8 @@ table {
 
     tr {
       td {
+        padding: 5px 0;
+
         button {
           i {
             font-size: 1.3rem;

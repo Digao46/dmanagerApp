@@ -2,28 +2,35 @@ import React from "react";
 import { toast } from "react-hot-toast";
 
 import isAuthenticated from "../../services/Authentication/Authentication";
+import isAuthorizated from "../../services/Authorization/Authorization";
 
 import {
-  findDeletedClients,
+  findClients,
   findClient,
-  restoreClient,
+  findClientsByName,
+  deleteClient,
 } from "../../services/Api/Clients/ClientsEndpoint";
 
-import { nextPage, prevPage, goToPage } from "../../helpers/helpers";
+import {
+  nextPage,
+  prevPage,
+  goToPage,
+  handleChange,
+} from "../../helpers/helpers";
 
 import Table from "../../components/Table/Table";
 
-import "./CustomerTrash.scss";
+import "./Customers.scss";
 import { Redirect } from "react-router";
 
-class ClientsTrash extends React.Component<any, any> {
+class Clients extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
     this.state = {
       // pagination
       perPage: [12, 25, 50, 100, 200],
-      totalPages: 12,
+      totalPages: 0,
       query: {
         limit: 12,
         page: 1,
@@ -52,11 +59,18 @@ class ClientsTrash extends React.Component<any, any> {
       ],
       actions: [
         {
-          class: "restore",
-          icon: "fa fa-trash-can-arrow-up",
-          func: this.restoreClient,
+          class: "edit",
+          icon: "fa fa-edit",
+          func: this.findClient,
+        },
+        {
+          class: "delete",
+          icon: "fa fa-trash-can",
+          func: this.deleteClient,
         },
       ],
+
+      isFiltered: false,
 
       redirectTo: null,
     };
@@ -68,11 +82,11 @@ class ClientsTrash extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findDeletedClients(this.state.query);
+    this.findClients(this.state.query);
   }
 
-  findDeletedClients = async (query: any) => {
-    await findDeletedClients(query)
+  findClients = async (query: any) => {
+    await findClients(query)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
@@ -104,7 +118,9 @@ class ClientsTrash extends React.Component<any, any> {
   findClient = async (clientId: string) => {
     await findClient(clientId)
       .then((res: any) => {
-        this.setState({ client: res.data.client });
+        localStorage.setItem("client", JSON.stringify(res.data.client));
+
+        this.setState({ client: res.data.client, redirectTo: "/clients/edit" });
       })
       .catch((err: any) => {
         if (err.response.status === 401) {
@@ -117,22 +133,62 @@ class ClientsTrash extends React.Component<any, any> {
           return;
         }
 
-        this.setState({ client: {} });
+        this.setState({
+          client: {},
+        });
 
         return toast.error(err.response.data.message);
       });
   };
 
-  restoreClient = async (clientId: string) => {
+  findClientsByName = async (clientName: string, query: any, e?: any) => {
+    if (e) e.preventDefault();
+
+    const newQuery = { ...query };
+    newQuery.page = 1;
+
+    await findClientsByName(clientName, newQuery)
+      .then((res) => {
+        let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
+
+        this.setState({
+          clients: res.data.data.clients,
+          totalPages: pages,
+          query: newQuery,
+          isFiltered: true,
+        });
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        }
+
+        this.setState({
+          clients: [],
+          totalPages: 1,
+          isFiltered: true,
+        });
+
+        return toast.error(err.response.data.message);
+      });
+  };
+
+  deleteClient = async (clientId: string) => {
     const newClients = this.state.clients.filter(
       (client: any) => client._id !== clientId
     );
 
-    if (window.confirm("Realmente deseja restaurar esse cliente?")) {
-      await restoreClient(clientId)
+    if (window.confirm("Realmente deseja excluir esse cliente?")) {
+      await deleteClient(clientId)
         .then((res: any) => {
           toast.success(res.data.message);
-          this.syncClientsAfterRestoring(newClients);
+          this.syncClientsAfterDeleting(newClients);
         })
         .catch((err: any) => {
           if (err.response.status === 401) {
@@ -148,12 +204,19 @@ class ClientsTrash extends React.Component<any, any> {
           return toast.error(err.response.data.message);
         });
     }
-
-    return;
   };
 
-  syncClientsAfterRestoring = (newClients: any) => {
+  syncClientsAfterDeleting = (newClients: any) => {
     this.setState({ clients: newClients });
+  };
+
+  handleChange = async (e: any) => {
+    if (this.state.isFiltered) {
+      await this.findClients(this.state.query);
+      this.setState({ isFiltered: false });
+    }
+
+    handleChange(this, e);
   };
 
   handleLimitChange = async (e: any) => {
@@ -166,25 +229,43 @@ class ClientsTrash extends React.Component<any, any> {
 
     this.setState({ query: query });
 
-    await this.findDeletedClients(query);
+    if (this.state.isFiltered) {
+      this.findClientsByName(this.state.clientName, this.state.query, e);
+    } else {
+      await this.findClients(query);
+    }
   };
 
   goToPage = async (e: any) => {
     e.preventDefault();
-
-    goToPage(this, this.findDeletedClients, +e.target.textContent);
+    if (this.state.isFiltered) {
+      goToPage(
+        this,
+        this.findClientsByName,
+        +e.target.textContent,
+        this.state.clientName
+      );
+    } else {
+      goToPage(this, this.findClients, +e.target.textContent);
+    }
   };
 
   previousPage = async (e: any) => {
     e.preventDefault();
-
-    prevPage(this, this.findDeletedClients);
+    if (this.state.isFiltered) {
+      prevPage(this, this.findClientsByName, this.state.clientName);
+    } else {
+      prevPage(this, this.findClients);
+    }
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
-
-    nextPage(this, this.findDeletedClients);
+    if (this.state.isFiltered) {
+      nextPage(this, this.findClientsByName, this.state.clientName);
+    } else {
+      nextPage(this, this.findClients);
+    }
   };
 
   render() {
@@ -195,6 +276,36 @@ class ClientsTrash extends React.Component<any, any> {
     return (
       <section className="container d-flex justify-content-center col-12">
         <div className="container d-flex align-items-center flex-column">
+          <div className="formClientArea container d-flex justify-content-center align-items-center mb-2">
+            <form
+              className="d-flex justify-content-center align-itens-center"
+              onSubmit={(e) =>
+                this.findClientsByName(
+                  this.state.clientName,
+                  this.state.query,
+                  e
+                )
+              }
+            >
+              <input
+                type="text"
+                onChange={this.handleChange}
+                name="clientName"
+                id="clientInput"
+                className="selectClient col-6 me-2 px-4 py-1"
+                placeholder="Pesquisar cliente"
+                required
+              />
+
+              <button
+                type="submit"
+                className="btn col-1 d-flex justify-content-center align-items-center"
+              >
+                <i className="fa fa-search" />
+              </button>
+            </form>
+          </div>
+
           <div className="tableArea d-flex justify-content-center align-items-center my-2 col-12">
             <Table
               content={this.state.content}
@@ -213,4 +324,4 @@ class ClientsTrash extends React.Component<any, any> {
   }
 }
 
-export default ClientsTrash;
+export default Clients;

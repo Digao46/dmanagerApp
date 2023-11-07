@@ -1,23 +1,27 @@
 import React from "react";
 import { toast } from "react-hot-toast";
 
-import isAuthenticated from "../../services/Authentication/Authentication";
-import isAuthorizated from "../../services/Authorization/Authorization";
+import isAuthenticated from "../../../services/Authentication/Authentication";
+import isAuthorizated from "../../../services/Authorization/Authorization";
 
 import {
-  findDeletedProducts,
-  findProduct,
-  restoreProduct,
-} from "../../services/Api/Storage/StorageEndpoint";
+  findDeletedUsers,
+  restoreUser,
+} from "../../../services/Api/Users/UsersEndpoint";
 
-import { nextPage, prevPage, goToPage } from "../../helpers/helpers";
+import {
+  nextPage,
+  prevPage,
+  goToPage,
+  handleChange,
+} from "../../../helpers/helpers";
 
-import Table from "../../components/Table/Table";
+import Table from "../../../components/Table/Table";
 
-import "./StorageTrash.scss";
+import "./UsersTrash.scss";
 import { Redirect } from "react-router";
 
-class StorageTrash extends React.Component<any, any> {
+class UsersTrash extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
@@ -28,44 +32,38 @@ class StorageTrash extends React.Component<any, any> {
       query: {
         limit: 12,
         page: 1,
-        orderBy: JSON.stringify([
-          { field: "category", direction: "asc" },
-          { field: "name", direction: "asc" },
-          { field: "deletedAt", direction: "asc" },
-        ]),
+        orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
         where: JSON.stringify({}),
       },
 
-      products: [],
-      product: {},
-      productName: "",
+      users: [],
+      user: {},
+      userName: "",
 
       content: [
-        { head: "Produto", field: "name", authorizated: true },
-        { head: "Categoria", field: "category", authorizated: true },
-        { head: "Estoque", field: "storage", authorizated: true },
-        { head: "Montado", field: "isMounted", authorizated: true },
         {
-          head: "Preço Venda",
-          field: "sellPrice",
-          type: "currency",
-          authorizated: true,
+          head: "Nome de Usuário",
+          field: "username",
+          authorizated: isAuthorizated(),
         },
+        { head: "Nome", field: "name", authorizated: isAuthorizated() },
+        { head: "Admin", field: "isAdmin", authorizated: isAuthorizated() },
         {
-          head: "Preço Custo",
-          field: "costPrice",
-          type: "currency",
+          head: "Membro desde:",
+          field: "createdAt",
+          type: "date",
           authorizated: isAuthorizated(),
         },
       ],
-
       actions: [
         {
           class: "restore",
           icon: "fa fa-trash-can-arrow-up",
-          func: this.restoreProduct,
+          func: this.restoreUser,
         },
       ],
+
+      isFiltered: false,
 
       redirectTo: null,
     };
@@ -77,16 +75,16 @@ class StorageTrash extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findDeletedProducts(this.state.query);
+    this.findDeletedUsers(this.state.query);
   }
 
-  findDeletedProducts = async (query: any) => {
-    await findDeletedProducts(query)
+  findDeletedUsers = async (query: any) => {
+    await findDeletedUsers(query)
       .then((res) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          products: res.data.data.products,
+          users: res.data.data.users,
           totalPages: pages,
         });
       })
@@ -102,7 +100,7 @@ class StorageTrash extends React.Component<any, any> {
         }
 
         this.setState({
-          products: [],
+          users: [],
           totalPages: 1,
         });
 
@@ -110,61 +108,41 @@ class StorageTrash extends React.Component<any, any> {
       });
   };
 
-  findProduct = async (productId: string) => {
-    await findProduct(productId)
-      .then((res: any) => {
-        this.setState({ product: res.data.product });
-      })
-      .catch((err: any) => {
-        if (err.response.status === 401) {
-          toast.error(err.response.data.message);
-
-          this.setState({ redirectTo: "/login" });
-
-          localStorage.removeItem("user");
-
-          return;
-        }
-
-        this.setState({
-          product: {},
-        });
-
-        return toast.error(err.response.data.message);
-      });
-  };
-
-  restoreProduct = async (productId: string) => {
-    const newProducts = this.state.products.filter(
-      (product: any) => product._id !== productId
+  restoreUser = async (userId: string) => {
+    const newUsers = this.state.users.filter(
+      (user: any) => user._id !== userId
     );
 
-    if (window.confirm("Realmente deseja restaurar esse produto?")) {
-      await restoreProduct(productId)
+    if (window.confirm("Realmente deseja restaurar esse usuário?")) {
+      await restoreUser(userId)
         .then((res: any) => {
           toast.success(res.data.message);
-          this.syncProductsAfterRestoring(newProducts);
+          this.syncUsersAfterDeleting(newUsers);
         })
         .catch((err: any) => {
           if (err.response.status === 401) {
             toast.error(err.response.data.message);
-
             this.setState({ redirectTo: "/login" });
-
             localStorage.removeItem("user");
-
             return;
           }
 
           return toast.error(err.response.data.message);
         });
     }
-
-    return;
   };
 
-  syncProductsAfterRestoring = (newProducts: any) => {
-    this.setState({ products: newProducts });
+  syncUsersAfterDeleting = (newUsers: any) => {
+    this.setState({ users: newUsers });
+  };
+
+  handleChange = async (e: any) => {
+    if (this.state.isFiltered) {
+      await this.findDeletedUsers(this.state.query);
+      this.setState({ isFiltered: false });
+    }
+
+    handleChange(this, e);
   };
 
   handleLimitChange = async (e: any) => {
@@ -177,25 +155,39 @@ class StorageTrash extends React.Component<any, any> {
 
     this.setState({ query: query });
 
-    await this.findDeletedProducts(query);
+    await this.findDeletedUsers(query);
   };
 
   goToPage = async (e: any) => {
     e.preventDefault();
-
-    goToPage(this, this.findDeletedProducts, +e.target.textContent);
+    if (this.state.isFiltered) {
+      goToPage(
+        this,
+        this.findDeletedUsers,
+        +e.target.textContent,
+        this.state.userName
+      );
+    } else {
+      goToPage(this, this.findDeletedUsers, +e.target.textContent);
+    }
   };
 
   previousPage = async (e: any) => {
     e.preventDefault();
-
-    prevPage(this, this.findDeletedProducts);
+    if (this.state.isFiltered) {
+      prevPage(this, this.findDeletedUsers, this.state.userName);
+    } else {
+      prevPage(this, this.findDeletedUsers);
+    }
   };
 
   nextPage = async (e: any) => {
     e.preventDefault();
-
-    nextPage(this, this.findDeletedProducts);
+    if (this.state.isFiltered) {
+      nextPage(this, this.findDeletedUsers, this.state.userName);
+    } else {
+      nextPage(this, this.findDeletedUsers);
+    }
   };
 
   render() {
@@ -209,7 +201,7 @@ class StorageTrash extends React.Component<any, any> {
           <div className="tableArea d-flex justify-content-center align-items-center my-2 col-12">
             <Table
               content={this.state.content}
-              data={this.state.products}
+              data={this.state.users}
               actions={this.state.actions}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
@@ -224,4 +216,4 @@ class StorageTrash extends React.Component<any, any> {
   }
 }
 
-export default StorageTrash;
+export default UsersTrash;
