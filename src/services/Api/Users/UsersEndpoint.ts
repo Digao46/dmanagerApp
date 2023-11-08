@@ -40,6 +40,14 @@ export async function findUsersByName(name: string, query: any) {
   return await usersEndpoint.get(`/name/${name}`, { params });
 }
 
+export async function addUser(params: any) {
+  return await usersEndpoint.post("/add", params);
+}
+
+export async function editUser(id: string, params: any) {
+  return await usersEndpoint.put(`/edit/${id}`, params);
+}
+
 export async function deleteUser(id: string) {
   return await usersEndpoint.delete(`/delete/${id}`);
 }

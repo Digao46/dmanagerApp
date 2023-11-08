@@ -21,12 +21,20 @@ import EditClient from "../../pages/Customers/Edit/EditCustomer";
 
 import Users from "../../pages/Users/Users";
 import UsersTrash from "../../pages/Users/Trash/UsersTrash";
+import AddUser from "../../pages/Users/Add/AddUser";
+import EditUser from "../../pages/Users/Edit/EditUser";
 
 class Main extends React.Component<any, any> {
   render() {
     return (
       <main className="mt-4">
         <HashRouter basename="/">
+          <Route path="/users/edit" exact>
+            <EditUser />
+          </Route>
+          <Route path="/users/add" exact>
+            <AddUser />
+          </Route>
           <Route path="/users/trash" exact>
             <UsersTrash />
           </Route>

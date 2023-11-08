@@ -48,8 +48,6 @@ class EditClient extends React.Component<any, any> {
     if (Object.keys(client).length <= 0)
       return toast.error("Nenhuma alteração identificada!");
 
-    console.log(client);
-
     editClient(id, client)
       .then((res: any) => {
         toast.success(res.data.message);
