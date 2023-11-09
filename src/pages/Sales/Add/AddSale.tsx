@@ -9,6 +9,8 @@ import {
 } from "../../../services/Api/Storage/StorageEndpoint";
 import { addSale } from "../../../services/Api/Sales/SalesEndpoint";
 
+import isAuthenticated from "../../../services/Authentication/Authentication";
+
 import "./AddSale.scss";
 
 class AddSale extends React.Component<any, any> {
@@ -54,6 +56,11 @@ class AddSale extends React.Component<any, any> {
   }
 
   componentDidMount(): void {
+    if (!isAuthenticated()) {
+      window.alert("Sessão Expirada. Por favor efetue o login novamente!");
+      this.setState({ redirectTo: "/login" });
+    }
+
     findProducts(this.state.productsQuery).then((res: any) => {
       this.setState({ products: res.data.data.products });
     });

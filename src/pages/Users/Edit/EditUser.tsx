@@ -4,6 +4,8 @@ import { toast } from "react-hot-toast";
 
 import { editUser } from "../../../services/Api/Users/UsersEndpoint";
 
+import isAuthenticated from "../../../services/Authentication/Authentication";
+
 import "./EditUser.scss";
 
 class EditUser extends React.Component<any, any> {
@@ -17,6 +19,11 @@ class EditUser extends React.Component<any, any> {
   }
 
   componentDidMount(): void {
+    if (!isAuthenticated()) {
+      window.alert("Sessão Expirada. Por favor efetue o login novamente!");
+      this.setState({ redirectTo: "/login" });
+    }
+
     const user = JSON.parse(localStorage.getItem("selectedUser")!);
 
     this.setState({ user: user });

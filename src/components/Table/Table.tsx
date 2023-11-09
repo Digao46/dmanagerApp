@@ -10,35 +10,29 @@ class Table extends React.Component<any, any> {
   }
 
   renderPages = () => {
-    const elements: any[] = [];
+    const elements: JSX.Element[] = [];
 
     const currentPage = this.props.state.query.page;
     const totalPages = this.props.state.totalPages;
+    const pagesToShow = 5;
 
-    for (let group = 0; group < Math.ceil(totalPages / 3); group++) {
-      const pageGroupStart = group * 3 + 1;
-      const pageGroupEnd = Math.min(pageGroupStart + 2, totalPages);
+    let startPage = Math.max(currentPage - 1, 1);
+    let endPage = Math.min(startPage + pagesToShow - 1, totalPages);
 
-      for (let page = pageGroupStart; page <= pageGroupEnd; page++) {
-        let element: JSX.Element;
+    startPage = Math.max(endPage - pagesToShow + 1, 1);
 
-        if (page === currentPage) {
-          element = (
-            <li className="page-item" key={page}>
-              <span className="page-link active">{currentPage}</span>
-            </li>
-          );
-        } else {
-          element = (
-            <li className="page-item" key={page} onClick={this.props.goToPage}>
-              <span className="page-link">{page}</span>
-            </li>
-          );
-        }
+    for (let page = startPage; page <= endPage; page++) {
+      const element = (
+        <li className="page-item" key={page} onClick={this.props.goToPage}>
+          <span className={`page-link ${page === currentPage ? "active" : ""}`}>
+            {page}
+          </span>
+        </li>
+      );
 
-        elements.push(element);
-      }
+      elements.push(element);
     }
+
     return elements;
   };
 
@@ -145,7 +139,7 @@ class Table extends React.Component<any, any> {
         <tfoot className="text-center">
           <tr>
             <td className="pagination col-12">
-              <div className="perPage d-flex justify-content-center align-itens-center col-12">
+              <div className="perPage d-flex justify-content-center align-itens-center col-8">
                 <span className="d-flex flex-column justify-content-center align-itens-center col-5 mx-1">
                   Produtos por página:
                 </span>
@@ -166,7 +160,7 @@ class Table extends React.Component<any, any> {
                 </div>
               </div>
 
-              <div className="prevNext d-flex justify-content-center align-items-center col-12">
+              <div className="prevNext d-flex justify-content-center align-items-center col-8">
                 <nav className="d-flex align-items-center justify-content-center">
                   <ul className="pagination d-flex justify-content-center align-items-center">
                     {this.props.state.query.page > 1 ? (
@@ -203,6 +197,14 @@ class Table extends React.Component<any, any> {
                     )}
                   </ul>
                 </nav>
+              </div>
+
+              <div className="totalPages d-flex justify-content-center align-items-center col-4">
+                {`${
+                  this.props.state.query.limit * this.props.state.query.page
+                } de ${this.props.state.totalDocs} | (Pág ${
+                  this.props.state.query.page
+                } de ${this.props.state.totalPages})`}
               </div>
             </td>
           </tr>

@@ -58,6 +58,7 @@ class Sales extends React.Component<any, any> {
 
         this.setState({
           sales: res.data.data.sales,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
           total: res.data.data.documents.total,
         });
@@ -94,6 +95,7 @@ class Sales extends React.Component<any, any> {
 
         this.setState({
           sales: res.data.data.sales,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
           total: res.data.data.documents.total,
         });

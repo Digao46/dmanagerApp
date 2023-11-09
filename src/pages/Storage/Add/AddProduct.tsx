@@ -7,6 +7,8 @@ import {
   addProduct,
 } from "../../../services/Api/Storage/StorageEndpoint";
 
+import isAuthenticated from "../../../services/Authentication/Authentication";
+
 import "./AddProduct.scss";
 
 class AddProduct extends React.Component<any, any> {
@@ -43,6 +45,11 @@ class AddProduct extends React.Component<any, any> {
   }
 
   componentDidMount(): void {
+    if (!isAuthenticated()) {
+      window.alert("Sessão Expirada. Por favor efetue o login novamente!");
+      this.setState({ redirectTo: "/login" });
+    }
+
     findCanMountProducts()
       .then((res: any) => {
         this.setState({ products: res.data.data.products });

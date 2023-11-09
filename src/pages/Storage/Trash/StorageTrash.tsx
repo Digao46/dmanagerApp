@@ -87,6 +87,7 @@ class StorageTrash extends React.Component<any, any> {
 
         this.setState({
           products: res.data.data.products,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
         });
       })

@@ -92,6 +92,7 @@ class Users extends React.Component<any, any> {
 
         this.setState({
           users: res.data.data.users,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
         });
       })
@@ -153,6 +154,7 @@ class Users extends React.Component<any, any> {
 
         this.setState({
           users: res.data.data.users,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
           query: newQuery,
           isFiltered: true,

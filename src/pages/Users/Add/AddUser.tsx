@@ -4,6 +4,8 @@ import { toast } from "react-hot-toast";
 
 import { addUser } from "../../../services/Api/Users/UsersEndpoint";
 
+import isAuthenticated from "../../../services/Authentication/Authentication";
+
 import "./AddUser.scss";
 
 class AddUser extends React.Component<any, any> {
@@ -20,6 +22,13 @@ class AddUser extends React.Component<any, any> {
 
       redirectTo: null,
     };
+  }
+
+  componentDidMount(): void {
+    if (!isAuthenticated()) {
+      window.alert("Sessão Expirada. Por favor efetue o login novamente!");
+      this.setState({ redirectTo: "/login" });
+    }
   }
 
   handleIsAdminChange = (e: any) => {

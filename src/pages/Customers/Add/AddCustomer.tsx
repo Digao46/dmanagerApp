@@ -4,6 +4,8 @@ import { toast } from "react-hot-toast";
 
 import { addClient } from "../../../services/Api/Clients/ClientsEndpoint";
 
+import isAuthenticated from "../../../services/Authentication/Authentication";
+
 import "./AddCustomer.scss";
 
 class AddClient extends React.Component<any, any> {
@@ -17,6 +19,13 @@ class AddClient extends React.Component<any, any> {
 
       redirectTo: null,
     };
+  }
+
+  componentDidMount(): void {
+    if (!isAuthenticated()) {
+      window.alert("Sessão Expirada. Por favor efetue o login novamente!");
+      this.setState({ redirectTo: "/login" });
+    }
   }
 
   handleClientDataChange = (e: any) => {

@@ -85,6 +85,7 @@ class UsersTrash extends React.Component<any, any> {
 
         this.setState({
           users: res.data.data.users,
+          totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
         });
       })
