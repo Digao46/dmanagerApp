@@ -193,7 +193,7 @@ class Table extends React.Component<any, any> {
               </nav>
             </td>
 
-            <td className="d-flex align-items-center justify-content-center col-6">
+            <td className="d-flex align-items-center justify-content-center col-4">
               <span>
                 {`${
                   this.props.state.query.limit * this.props.state.query.page >
