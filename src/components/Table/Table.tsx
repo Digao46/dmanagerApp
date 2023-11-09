@@ -116,7 +116,7 @@ class Table extends React.Component<any, any> {
               )}
 
               {isAuthorizated() && (
-                <td scope="col">
+                <td>
                   <div className="d-flex justify-content-center">
                     {this.props.actions.map((action: any, key: any) => (
                       <button
@@ -136,70 +136,65 @@ class Table extends React.Component<any, any> {
           ))}
         </tbody>
 
-        <tfoot className="text-center">
-          <tr>
-            <td className="pagination col-12">
-              <div className="perPage d-flex justify-content-center align-itens-center col-8">
-                <span className="d-flex flex-column justify-content-center align-itens-center col-5 mx-1">
-                  Produtos por página:
-                </span>
-                <div className="selArea d-flex flex-column justify-content-center align-itens-center col-4 mx-1">
-                  <select
-                    className="text-center"
-                    value={this.props.state.query.limit}
-                    onChange={this.props.handleLimitChange}
-                  >
-                    {this.props.state.perPage.map(
-                      (option: number, index: number) => (
-                        <option key={index} value={option}>
-                          {option}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-              </div>
+        <tfoot>
+          <tr className="d-flex flex-row justify-content-between col-12">
+            <td className="d-flex align-items-center justify-content-center col-8">
+              <span className="d-flex flex-column justify-content-center align-items-center col-5 mx-1">
+                Produtos por página:
+              </span>
 
-              <div className="prevNext d-flex justify-content-center align-items-center col-8">
-                <nav className="d-flex align-items-center justify-content-center">
-                  <ul className="pagination d-flex justify-content-center align-items-center">
-                    {this.props.state.query.page > 1 ? (
-                      <li className="page-item">
-                        <span
-                          className="page-link"
-                          onClick={this.props.previousPage}
-                        >
-                          &lt;
-                        </span>
-                      </li>
-                    ) : (
-                      <li className="page-item disabled">
-                        <span className="page-link">&lt;</span>
-                      </li>
-                    )}
+              <select
+                className="text-center col-5"
+                value={this.props.state.query.limit}
+                onChange={this.props.handleLimitChange}
+              >
+                {this.props.state.perPage.map(
+                  (option: number, index: number) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  )
+                )}
+              </select>
+            </td>
 
-                    {this.renderPages()}
+            <td className="d-flex align-items-center justify-content-center col-6">
+              <nav className="d-flex align-items-center justify-content-center">
+                <ul className="pagination d-flex justify-content-center align-items-center">
+                  {this.props.state.query.page > 1 ? (
+                    <li className="page-item">
+                      <span
+                        className="page-link"
+                        onClick={this.props.previousPage}
+                      >
+                        &lt;
+                      </span>
+                    </li>
+                  ) : (
+                    <li className="page-item disabled">
+                      <span className="page-link">&lt;</span>
+                    </li>
+                  )}
 
-                    {this.props.state.query.page <
-                    this.props.state.totalPages ? (
-                      <li className="page-item">
-                        <span
-                          className="page-link"
-                          onClick={this.props.nextPage}
-                        >
-                          &gt;
-                        </span>
-                      </li>
-                    ) : (
-                      <li className="page-item disabled">
-                        <span className="page-link">&gt;</span>
-                      </li>
-                    )}
-                  </ul>
-                </nav>
-              </div>
+                  {this.renderPages()}
 
-              <div className="totalPages d-flex justify-content-start align-items-center col-4">
+                  {this.props.state.query.page < this.props.state.totalPages ? (
+                    <li className="page-item">
+                      <span className="page-link" onClick={this.props.nextPage}>
+                        &gt;
+                      </span>
+                    </li>
+                  ) : (
+                    <li className="page-item disabled">
+                      <span className="page-link">&gt;</span>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            </td>
+
+            <td className="d-flex align-items-center justify-content-center col-6">
+              <span>
                 {`${
                   this.props.state.query.limit * this.props.state.query.page >
                   this.props.state.totalDocs
@@ -208,7 +203,7 @@ class Table extends React.Component<any, any> {
                 } de ${this.props.state.totalDocs ?? 0} | (Pág ${
                   this.props.state.query.page
                 } de ${this.props.state.totalPages})`}
-              </div>
+              </span>
             </td>
           </tr>
         </tfoot>

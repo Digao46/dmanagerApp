@@ -49,61 +49,63 @@ table {
 
     tr {
       height: 60px;
+      width: 100%;
 
       td {
         border: none;
-      }
 
-      .pagination {
-        height: 100%;
-        color: var(--secondary);
-
-        .perPage {
-          span {
-            font-size: 0.8rem;
-          }
-
-          .selArea {
-            height: 100%;
-            select {
-              max-height: 30px;
-              background-color: var(--primary-500);
-              border: 1px solid var(--secondary);
-              border-radius: 4px;
-              color: var(--secondary);
-            }
-          }
+        span {
+          font-size: 0.8rem;
+          color: var(--secondary) !important;
         }
 
-        .prevNext {
-          color: var(--secondary) !important;
+        select {
+          height: 30px;
+          max-height: 30px;
+          background-color: var(--primary-500);
+          border: 1px solid var(--secondary);
+          border-radius: 4px;
+          color: var(--secondary);
+        }
+      }
 
-          nav {
-            height: 100%;
+      color: var(--secondary);
+      border: none;
 
-            ul {
-              margin: 0;
+      nav {
+        color: var(--secondary) !important;
 
-              li {
-                span {
-                  background-color: var(--primary-500);
-                  color: var(--secondary);
-                  border: 1px solid var(--secondary);
+        height: 100%;
 
-                  &:hover {
-                    cursor: pointer;
-                  }
+        .pagination {
+          margin: 0;
+          background-color: var(--primary-500);
 
-                  &.active {
-                    background-color: var(--primary-800) !important;
-                  }
-                }
+          li {
+            span {
+              background-color: var(--primary-500);
+              color: var(--secondary);
+              border: 1px solid var(--secondary);
 
-                &.disabled {
-                  span {
-                    color: var(--primary-800) !important;
-                  }
-                }
+              &:hover {
+                cursor: pointer;
+                background-color: var(--primary-800) !important;
+                border: 1px solid var(--secondary);
+                color: var(--secondary);
+              }
+
+              &.active {
+                background-color: var(--primary-800) !important;
+                border: 1px solid var(--secondary);
+                color: var(--secondary);
+              }
+            }
+
+            &.disabled {
+              span {
+                background-color: var(--primary-500) !important;
+                border: 1px solid var(--secondary);
+                color: var(--primary-800) !important;
               }
             }
           }
