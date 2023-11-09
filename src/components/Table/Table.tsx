@@ -199,10 +199,13 @@ class Table extends React.Component<any, any> {
                 </nav>
               </div>
 
-              <div className="totalPages d-flex justify-content-center align-items-center col-4">
+              <div className="totalPages d-flex justify-content-start align-items-center col-4">
                 {`${
-                  this.props.state.query.limit * this.props.state.query.page
-                } de ${this.props.state.totalDocs} | (Pág ${
+                  this.props.state.query.limit * this.props.state.query.page >
+                  this.props.state.totalDocs
+                    ? this.props.state.totalDocs
+                    : this.props.state.query.limit * this.props.state.query.page
+                } de ${this.props.state.totalDocs ?? 0} | (Pág ${
                   this.props.state.query.page
                 } de ${this.props.state.totalPages})`}
               </div>
