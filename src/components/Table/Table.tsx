@@ -158,7 +158,7 @@ class Table extends React.Component<any, any> {
               </select>
             </td>
 
-            <td className="d-flex align-items-center justify-content-center col-6">
+            <td className="d-flex align-items-center justify-content-center col-5">
               <nav className="d-flex align-items-center justify-content-center">
                 <ul className="pagination d-flex justify-content-center align-items-center">
                   {this.props.state.query.page > 1 ? (
@@ -193,7 +193,7 @@ class Table extends React.Component<any, any> {
               </nav>
             </td>
 
-            <td className="d-flex align-items-center justify-content-center col-4">
+            <td className="d-flex align-items-center justify-content-center col-3">
               <span>
                 {`${
                   this.props.state.query.limit * this.props.state.query.page >
