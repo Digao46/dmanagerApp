@@ -18,18 +18,6 @@ salesEndpoint.interceptors.request.use(
   }
 );
 
-export async function findSalesOpenedByClientId(id: string, query: any) {
-  const params = new URLSearchParams(query);
-
-  return await salesEndpoint.get(`/opened/${id}`, { params });
-}
-
-export async function findSalesOpened(query: any) {
-  const params = new URLSearchParams(query);
-
-  return await salesEndpoint.get("/opened", { params });
-}
-
 export async function findSales(query: any) {
   const params = new URLSearchParams(query);
 
@@ -44,14 +32,6 @@ export async function filterSales(query: any) {
 
 export async function addSale(params: any) {
   return await salesEndpoint.post("/add", params);
-}
-
-export async function closeSale(id: string) {
-  return await salesEndpoint.put(`/close/${id}`);
-}
-
-export async function closeManySales(ids: string[]) {
-  return await salesEndpoint.put(`/close/all/${ids}`);
 }
 
 export async function deleteSale(id: string) {

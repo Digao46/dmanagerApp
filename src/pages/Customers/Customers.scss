@@ -1,53 +1,52 @@
 section {
-    height: 100%;
-    width: 100%;
-  
-    .formClientArea {
-      background-color: transparent;
-      border: none;
-      box-shadow: none;
-  
-      max-height: 40px;
-  
-      form {
-        min-width: 100%;
-  
-        input {
-          border: none;
-          border-radius: 4px;
-          height: 40px;
-  
-          background-color: var(--primary-500);
+  height: 100%;
+  width: 100%;
+
+  .formClientArea {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+
+    max-height: 40px;
+
+    form {
+      min-width: 100%;
+
+      input {
+        border: none;
+        border-radius: 4px;
+        height: 40px;
+
+        background-color: var(--primary-500);
+        color: var(--secondary);
+
+        &::placeholder {
           color: var(--secondary);
-  
-          &::placeholder {
-            color: var(--secondary);
-          }
         }
-  
-        .btn {
-          border: none;
-          border-radius: 4px;
-          height: 40px;
-  
+      }
+
+      .btn {
+        border: none;
+        border-radius: 4px;
+        height: 40px;
+
+        background-color: var(--primary-500);
+        color: var(--secondary);
+
+        i {
+          font-size: 1rem;
+        }
+
+        &:hover {
+          color: #dfb64f;
+
           background-color: var(--primary-500);
-          color: var(--secondary);
-  
-          i {
-            font-size: 1rem;
-          }
-  
-          &:hover {
-            color: #dfb64f;
-  
-            background-color: var(--primary-500);
-          }
         }
       }
     }
-
-    .tableArea {
-      min-height: 31%;
-    }
   }
-  
+
+  .tableArea {
+    min-height: 31%;
+  }
+}

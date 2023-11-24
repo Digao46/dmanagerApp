@@ -1,0 +1,48 @@
+.additionCard {
+    background-color: var(--primary-500);
+    height: 120px;
+    border-radius: 5px;
+  
+    .cardHeader {
+      .clientLabel,
+      .statusLabel,
+      .sellerLabel,
+      .dateLabel,
+      .hourLabel,
+      .trashCan {
+        font-size: 0.8rem;
+        font-weight: 400;
+  
+        overflow-x: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+  
+        i {
+          font-size: 0.8rem;
+  
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  
+    .totalValue {
+      font-size: 1.7rem;
+  
+      .totalLabel {
+        font-size: 0.8rem;
+        font-weight: 400;
+      }
+  
+      .moneyLabel {
+        font-size: 1rem;
+        font-weight: 400;
+  
+        .total {
+          font-size: 1px !important;
+        }
+      }
+    }
+  }
+  

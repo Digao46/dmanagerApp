@@ -6,7 +6,6 @@ import "./Main.scss";
 import Home from "../../pages/Home/Home";
 
 import Sales from "../../pages/Sales/Sales";
-import SalesOpened from "../../pages/Sales/Opened/SalesOpened";
 import AddSale from "../../pages/Sales/Add/AddSale";
 
 import Storage from "../../pages/Storage/Storage";
@@ -24,11 +23,18 @@ import UsersTrash from "../../pages/Users/Trash/UsersTrash";
 import AddUser from "../../pages/Users/Add/AddUser";
 import EditUser from "../../pages/Users/Edit/EditUser";
 
+import TabCard from "../../pages/TabCard/TabCard";
+import Additions from "../../pages/Additions/Additions";
+import AddAddition from "../../pages/Additions/Add/AddAddition";
+import AddDiscount from "../../pages/Discounts/Add/AddDiscount";
+import Discounts from "../../pages/Discounts/Discounts";
+
 class Main extends React.Component<any, any> {
   render() {
     return (
       <main className="mt-4">
         <HashRouter basename="/">
+          {/* Usuários */}
           <Route path="/users/edit" exact>
             <EditUser />
           </Route>
@@ -42,6 +48,7 @@ class Main extends React.Component<any, any> {
             <Users />
           </Route>
 
+          {/* Clientes */}
           <Route path="/clients/edit" exact>
             <EditClient />
           </Route>
@@ -55,6 +62,7 @@ class Main extends React.Component<any, any> {
             <Clients />
           </Route>
 
+          {/* Estoque */}
           <Route path="/storage/edit" exact>
             <EditProduct />
           </Route>
@@ -68,11 +76,26 @@ class Main extends React.Component<any, any> {
             <Storage />
           </Route>
 
+          {/* Comanda */}
+          <Route path="/discounts/add" exact>
+            <AddDiscount />
+          </Route>
+          <Route path="/discounts" exact>
+            <Discounts />
+          </Route>
+          <Route path="/additions/add" exact>
+            <AddAddition />
+          </Route>
+          <Route path="/additions" exact>
+            <Additions />
+          </Route>
+          <Route path={"/orders"}>
+            <TabCard />
+          </Route>
+
+          {/* Vendas */}
           <Route path="/sales/add" exact>
             <AddSale />
-          </Route>
-          <Route path="/sales/opened" exact>
-            <SalesOpened />
           </Route>
           <Route path="/sales" exact>
             <Sales />

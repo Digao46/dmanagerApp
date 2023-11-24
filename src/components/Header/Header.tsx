@@ -66,14 +66,47 @@ class Header extends React.Component<any, any> {
                   </li>
 
                   <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/sales/opened" className="ms-2">
-                      <i className="fa fa-box-open me-1" /> Em Aberto
+                    <Link to="/sales" className="ms-2">
+                      <i className="fa fa-dollar-sign me-1" /> Vendas
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="dropdown d-flex flex-column justify-content-center align-items-center col-2">
+                <div className="d-flex align-items-center justify-content-center">
+                  <span className="iconArea d-flex justify-content-center align-items-center me-2">
+                    <i className="fa fa-clipboard-list" />
+                  </span>
+                  <span className="d-flex justify-content-center align-items-center">
+                    <Link to="/orders">
+                      Comanda <i className="fa fa-caret-down ms-2" />
+                    </Link>
+                  </span>
+                </div>
+
+                <ul className="dropdown-list">
+                  <li className="dropdown-item d-flex align-items-center">
+                    <Link to="/discounts/add" className="ms-2">
+                      <i className="fa fa-minus me-1" /> Descontar
                     </Link>
                   </li>
 
                   <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/sales" className="ms-2">
-                      <i className="fa fa-dollar-sign me-1" /> Vendas
+                    <Link to="/discounts" className="ms-2">
+                      <i className="fa fa-box-open me-1" /> Descontos
+                    </Link>
+                  </li>
+
+                  <li className="dropdown-item d-flex align-items-center">
+                    <Link to="/additions/add" className="ms-2">
+                      <i className="fa fa-plus me-1" /> Adicionar
+                    </Link>
+                  </li>
+
+                  <li className="dropdown-item d-flex align-items-center">
+                    <Link to="/additions" className="ms-2">
+                      <i className="fa fa-list-ul me-1" /> Adições
                     </Link>
                   </li>
                 </ul>
@@ -162,49 +195,6 @@ class Header extends React.Component<any, any> {
                       </Link>
                     </li>
                   )}
-                </ul>
-              </li>
-
-              <li className="dropdown d-flex flex-column justify-content-center align-items-center col-2">
-                <div className="d-flex align-items-center justify-content-center">
-                  <span className="iconArea d-flex justify-content-center align-items-center me-1">
-                    <i className="fa fa-plus" />
-                  </span>
-                  <span>
-                    Outros <i className="fa fa-caret-down ms-2" />
-                  </span>
-                </div>
-
-                <ul className="dropdown-list">
-                  <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/discounts/add" className="ms-2">
-                      <i className="fa fa-plus me-1" /> Descontar Valor
-                    </Link>
-                  </li>
-
-                  <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/discounts" className="ms-2">
-                      <i className="fa fa-box-open me-1" /> Descontos
-                    </Link>
-                  </li>
-
-                  <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/additions/add" className="ms-2">
-                      <i className="fa fa-plus me-1" /> Adicionar Valor
-                    </Link>
-                  </li>
-
-                  <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/additions/opened" className="ms-2">
-                      <i className="fa fa-box-open me-1" /> Em Aberto
-                    </Link>
-                  </li>
-
-                  <li className="dropdown-item d-flex align-items-center">
-                    <Link to="/additions" className="ms-2">
-                      <i className="fa fa-plus me-1" /> Adições
-                    </Link>
-                  </li>
                 </ul>
               </li>
 

@@ -2,24 +2,24 @@ import React from "react";
 import { toast } from "react-hot-toast";
 
 import {
-  closeManySales,
-  closeSale,
-  findSalesOpened,
-  findSalesOpenedByClientId,
-} from "../../../services/Api/Sales/SalesEndpoint";
-import { findClients } from "../../../services/Api/Clients/ClientsEndpoint";
+  findTabCardData,
+  findTabCardDataByClientId,
+} from "../../services/Api/TabCard/TabCardEndpoint";
+import { findClients } from "../../services/Api/Clients/ClientsEndpoint";
 
-import isAuthenticated from "../../../services/Authentication/Authentication";
+import isAuthenticated from "../../services/Authentication/Authentication";
 
-import SaleCard from "../../../components/SaleCard/SaleCard";
-import ProductCard from "../../../components/ProductCard/ProductCard";
+import SaleCard from "../../components/SaleCard/SaleCard";
+import ProductCard from "../../components/ProductCard/ProductCard";
 
-import { nextPage, prevPage } from "../../../helpers/helpers";
+import { nextPage, prevPage } from "../../helpers/helpers";
 
-import "./SalesOpened.scss";
+import "./TabCard.scss";
 import { Redirect } from "react-router";
+import AdditionCard from "../../components/AdditionCard/AdditionCard";
+import DescriptionCard from "../../components/DescriptionCard/DescriptionCard";
 
-class SalesOpened extends React.Component<any, any> {
+class TabCard extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
@@ -34,14 +34,14 @@ class SalesOpened extends React.Component<any, any> {
         where: JSON.stringify({}),
       },
 
-      sales: [],
+      data: [],
       total: 0,
 
       // filtering
       clients: [],
       client: {},
       clientsQuery: {
-        limit: 200,
+        limit: 300,
         page: 1,
         orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
         where: {},
@@ -59,23 +59,23 @@ class SalesOpened extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    this.findSalesOpened(this.state.query);
+    this.findTabCardData(this.state.query);
 
     findClients(this.state.clientsQuery).then((res: any) => {
       this.setState({ clients: res.data.data.clients });
     });
   }
 
-  findSalesOpened = async (query: any) => {
-    await findSalesOpened(query)
+  findTabCardData = async (query: any) => {
+    findTabCardData(this.state.query)
       .then((res: any) => {
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          sales: res.data.data.sales,
+          data: res.data.data.registers,
+          total: res.data.data.documents.total,
           totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
-          total: res.data.data.documents.total,
         });
       })
       .catch((err: any) => {
@@ -90,7 +90,7 @@ class SalesOpened extends React.Component<any, any> {
         }
 
         this.setState({
-          sales: [],
+          data: [],
           totalPages: 1,
           total: 0,
         });
@@ -99,20 +99,23 @@ class SalesOpened extends React.Component<any, any> {
       });
   };
 
-  findSalesOpenedByClientId = async (client: any, query: any, e?: any) => {
+  findTabCardDataByClientId = async (client: any, query: any, e?: any) => {
     if (e) e.preventDefault();
 
-    findSalesOpenedByClientId(client._id, query)
+    findTabCardDataByClientId(client._id, query)
       .then((res: any) => {
+        console.log(res);
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
-          sales: res.data.data.sales,
+          data: res.data.data.registers,
+          total: client.debit,
           totalDocs: res.data.data.documents.qtd,
           totalPages: pages,
-          total: client.debit,
           isFiltered: true,
         });
+
+        setTimeout(this.handleVisualization, 0);
       })
       .catch((err: any) => {
         if (err.response.status === 401) {
@@ -126,79 +129,17 @@ class SalesOpened extends React.Component<any, any> {
         }
 
         this.setState({
-          sales: [],
+          data: [],
           totalPages: 1,
           total: 0,
         });
-
-        return toast.error(err.response.data.message);
-      });
-  };
-
-  closeSale = async (id: string) => {
-    await closeSale(id)
-      .then((res: any) => {
-        if (this.state.client._id) {
-          this.findSalesOpenedByClientId(this.state.client, this.state.query);
-        } else {
-          this.findSalesOpened(this.state.query);
-        }
-
-        toast.success(res.data.message);
-      })
-      .catch((err: any) => {
-        if (err.response.status === 401) {
-          toast.error(err.response.data.message);
-
-          this.setState({ redirectTo: "/login" });
-
-          localStorage.removeItem("user");
-
-          return;
-        }
-
-        return toast.error(err.response.data.message);
-      });
-  };
-
-  closeAllSales = async (sales: string[]) => {
-    let ids: any[] = [];
-
-    sales.forEach(async (sale: any) => {
-      ids.push(sale._id);
-    });
-
-    await closeManySales(ids)
-      .then((res: any) => {
-        this.findSalesOpened(this.state.query).then(() => {
-          const input = document.getElementById(
-            "clientInput"
-          ) as HTMLInputElement;
-          input.value = "";
-
-          this.setState({ client: {} });
-        });
-
-        toast.success(res.data.message);
-      })
-      .catch((err: any) => {
-        if (err.response.status === 401) {
-          toast.error(err.response.data.message);
-
-          this.setState({ redirectTo: "/login" });
-
-          localStorage.removeItem("user");
-
-          return;
-        }
 
         return toast.error(err.response.data.message);
       });
   };
 
   handleInputChange = async (e: any) => {
-    if (this.state.sales.length > 0)
-      await this.findSalesOpened(this.state.query);
+    if (this.state.data.length > 0) this.findTabCardData(this.state.query);
 
     const span = document.getElementById("total") as HTMLElement;
     const icon = document.getElementById("showTotalOpened")! as HTMLElement;
@@ -225,12 +166,12 @@ class SalesOpened extends React.Component<any, any> {
     this.setState({ client: client ?? {}, isFiltered: false });
   };
 
-  syncSalesAfterDeleting = (newSales: any) => {
+  syncDataAfterDeleting = (newObject: any) => {
     let total = 0;
 
-    newSales.map((sale: any) => (total += sale.total));
+    newObject.map((childObject: any) => (total += childObject.total));
 
-    this.setState({ sales: newSales, total: total });
+    this.setState({ data: newObject, total: total });
   };
 
   handleVisualization = () => {
@@ -257,9 +198,9 @@ class SalesOpened extends React.Component<any, any> {
     this.setState({ query: query });
 
     if (this.state.isFiltered) {
-      await this.findSalesOpenedByClientId(this.state.client, query);
+      await this.findTabCardDataByClientId(this.state.client, query);
     } else {
-      await this.findSalesOpened(query);
+      await this.findTabCardData(query);
     }
   };
 
@@ -267,9 +208,9 @@ class SalesOpened extends React.Component<any, any> {
     e.preventDefault();
 
     if (this.state.isFiltered) {
-      prevPage(this, this.findSalesOpenedByClientId, this.state.client);
+      prevPage(this, this.findTabCardDataByClientId, this.state.client);
     } else {
-      prevPage(this, this.findSalesOpened);
+      prevPage(this, this.findTabCardData);
     }
   };
 
@@ -277,9 +218,9 @@ class SalesOpened extends React.Component<any, any> {
     e.preventDefault();
 
     if (this.state.isFiltered) {
-      nextPage(this, this.findSalesOpenedByClientId, this.state.client);
+      nextPage(this, this.findTabCardDataByClientId, this.state.client);
     } else {
-      nextPage(this, this.findSalesOpened);
+      nextPage(this, this.findTabCardData);
     }
   };
 
@@ -291,11 +232,11 @@ class SalesOpened extends React.Component<any, any> {
     return (
       <section className="container d-flex justify-content-center col-12">
         <div className="container d-flex align-items-center flex-column">
-          <div className="formSaleArea container d-flex justify-content-center align-items-center mb-2">
+          <div className="formClientArea container d-flex justify-content-center align-items-center mb-2">
             <form
               className="d-flex justify-content-center align-itens-center"
               onSubmit={(e) =>
-                this.findSalesOpenedByClientId(
+                this.findTabCardDataByClientId(
                   this.state.client,
                   this.state.query,
                   e
@@ -355,19 +296,28 @@ class SalesOpened extends React.Component<any, any> {
               </div>
 
               {this.state.isFiltered && (
-                <div className="d-flex align-items-center justify-content-center col-12">
+                <div className="d-flex flex-column align-items-center justify-content-center col-12">
                   <button
-                    onClick={() => this.closeAllSales(this.state.sales)}
-                    className="btnFinish col-8"
+                    onClick={() =>
+                      this.setState({ reditectTo: "/discounts/add" })
+                    }
+                    className="btnFinish mb-1 col-8"
                   >
-                    Encerrar as vendas
+                    Descontar
+                  </button>
+
+                  <button
+                    onClick={() => window.alert("Enviando mensagem!")}
+                    className="btnFinish mt-1 col-8"
+                  >
+                    Cobrar
                   </button>
                 </div>
               )}
 
               <div className="pagination d-flex flex-column justify-content-center align-items-center col-10">
                 <div className="perPage d-flex justify-content-between align-items-center col-12 mb-3">
-                  <span className="col-6">Vendas por página:</span>
+                  <span className="col-6">Registros por página:</span>
                   <select
                     className="col-5 text-center"
                     value={this.state.query.limit}
@@ -409,32 +359,42 @@ class SalesOpened extends React.Component<any, any> {
             </div>
 
             <div className="mainDivOpened col-9">
-              {this.state.sales.map((sale: any) => (
-                <div
-                  className="container d-flex justify-content-center"
-                  key={sale._id}
-                >
-                  <SaleCard
-                    cardHeaderWidth={"col-11"}
-                    width={"col-8"}
-                    sale={sale}
-                    sales={this.state.sales}
-                    sync={this.syncSalesAfterDeleting}
-                  />
-
-                  <ProductCard sale={sale} />
-
-                  <div className="closeAllAction d-flex align-items-center justify-content-center col-1">
-                    <button
-                      className="btn"
-                      onClick={() => this.closeSale(sale._id)}
-                    >
-                      <i className="fa fa-circle-dollar-to-slot" />
-                      <p> Faturar </p>
-                    </button>
+              {this.state.data.map((item: any) =>
+                item.description ? (
+                  <div
+                    className="container d-flex justify-content-center"
+                    key={item._id}
+                  >
+                    <AdditionCard
+                      cardHeaderWidth={"col-10"}
+                      width={"col-9"}
+                      addition={item}
+                      additions={this.state.data}
+                      sync={this.syncDataAfterDeleting}
+                    />
+                    <DescriptionCard
+                      width={"col-3"}
+                      addition={item}
+                      context="addition"
+                    />
                   </div>
-                </div>
-              ))}
+                ) : (
+                  <div
+                    className="container d-flex justify-content-center"
+                    key={item._id}
+                  >
+                    <SaleCard
+                      cardHeaderWidth={"col-11"}
+                      width={"col-9"}
+                      sale={item}
+                      sales={this.state.data}
+                      sync={this.syncDataAfterDeleting}
+                    />
+
+                    <ProductCard sale={item} />
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -443,4 +403,4 @@ class SalesOpened extends React.Component<any, any> {
   }
 }
 
-export default SalesOpened;
+export default TabCard;
