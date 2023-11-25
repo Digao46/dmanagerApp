@@ -1,4 +1,4 @@
-name: CD - DN SMOKE BAR
+name: CD - DMANAGER APP
 
 on:
   push:

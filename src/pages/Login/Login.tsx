@@ -52,7 +52,7 @@ class Login extends React.Component<any, any> {
         <div className="formLoginArea container d-flex flex-column justify-content-center align-items-center col-4">
           <div className="logoNTitle d-flex flex-column justify-content-center align-items-center mb-2">
             <img src={Logo} alt="Logo" />
-            <h1>DN SMOKE BAR</h1>
+            <h1>DManager</h1>
           </div>
 
           <form className="mt-2" onSubmit={this.logIn}>

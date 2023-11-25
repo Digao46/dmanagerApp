@@ -1,8 +1,8 @@
 {
-  "name": "dn-smoke-bar",
+  "name": "dmanager-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://digao46.github.io/dn-smoke-bar/#/",
+  "homepage": "https://digao46.github.io/dmanagerApp/#/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
