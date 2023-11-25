@@ -37,9 +37,29 @@ class AddAddition extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    findClients(this.state.clientsQuery).then((res: any) => {
-      this.setState({ clients: res.data.data.clients });
-    });
+    findClients(this.state.clientsQuery)
+      .then((res: any) => {
+        this.setState({ clients: res.data.data.clients });
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        }
+
+        this.setState({
+          data: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
+      });
   }
 
   handleChange = (e: any) => {

@@ -9,8 +9,6 @@ const tabCardEndpoint = axios.create({
 tabCardEndpoint.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem("user")!);
-
-    config.headers["company_id"] = user.companyId;
     config.headers!.Authorization = `Bearer ${user.token}`;
 
     return config;

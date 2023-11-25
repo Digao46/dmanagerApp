@@ -61,13 +61,53 @@ class AddSale extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    findProducts(this.state.productsQuery).then((res: any) => {
-      this.setState({ products: res.data.data.products });
-    });
+    findProducts(this.state.productsQuery)
+      .then((res: any) => {
+        this.setState({ products: res.data.data.products });
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
 
-    findClients(this.state.clientsQuery).then((res: any) => {
-      this.setState({ clients: res.data.data.clients });
-    });
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        }
+
+        this.setState({
+          data: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
+      });
+
+    findClients(this.state.clientsQuery)
+      .then((res: any) => {
+        this.setState({ clients: res.data.data.clients });
+      })
+      .catch((err: any) => {
+        if (err.response.status === 401) {
+          toast.error(err.response.data.message);
+
+          this.setState({ redirectTo: "/login" });
+
+          localStorage.removeItem("user");
+
+          return;
+        }
+
+        this.setState({
+          data: [],
+          totalPages: 1,
+          total: 0,
+        });
+
+        return toast.error(err.response.data.message);
+      });
   }
 
   handleProductSelectChange = async (e: any) => {
