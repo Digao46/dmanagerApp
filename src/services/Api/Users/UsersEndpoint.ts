@@ -8,8 +8,10 @@ const usersEndpoint = axios.create({
 
 usersEndpoint.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(localStorage.getItem("user")!);
-    config.headers!.Authorization = `Bearer ${token.token}`;
+    const user = JSON.parse(localStorage.getItem("user")!);
+
+    config.headers["company_id"] = user.companyId;
+    config.headers!.Authorization = `Bearer ${user.token}`;
 
     return config;
   },
