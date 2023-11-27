@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/dmanagerApp/static/css/main.e21efac1.css",
-    "main.js": "/dmanagerApp/static/js/main.214a575f.js",
+    "main.css": "/dmanagerApp/static/css/main.dbf961c0.css",
+    "main.js": "/dmanagerApp/static/js/main.fc93da01.js",
     "static/media/logo.png": "/dmanagerApp/static/media/logo.cfcd0a812bb723161a78.png",
     "index.html": "/dmanagerApp/index.html",
-    "main.e21efac1.css.map": "/dmanagerApp/static/css/main.e21efac1.css.map",
-    "main.214a575f.js.map": "/dmanagerApp/static/js/main.214a575f.js.map"
+    "main.dbf961c0.css.map": "/dmanagerApp/static/css/main.dbf961c0.css.map",
+    "main.fc93da01.js.map": "/dmanagerApp/static/js/main.fc93da01.js.map"
   },
   "entrypoints": [
-    "static/css/main.e21efac1.css",
-    "static/js/main.214a575f.js"
+    "static/css/main.dbf961c0.css",
+    "static/js/main.fc93da01.js"
   ]
 }
