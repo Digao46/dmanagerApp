@@ -95,6 +95,13 @@ class SaleCard extends React.Component<any, any> {
           </div>
 
           <div className="totalValue d-flex justify-content-around align-items-end mt-2 mx-5">
+            {this.props.sale.paymentMethod && (
+              <p className="methodLabel mb-1">
+                {" "}
+                Método: {this.props.sale.paymentMethod.method}
+              </p>
+            )}
+
             <p className="totalLabel mb-1"> Valor total: </p>
 
             <div>

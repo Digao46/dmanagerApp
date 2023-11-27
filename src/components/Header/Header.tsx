@@ -79,7 +79,7 @@ class Header extends React.Component<any, any> {
                     <i className="fa fa-clipboard-list" />
                   </span>
                   <span className="d-flex justify-content-center align-items-center">
-                    <Link to="/orders">
+                    <Link to="/orders" className="ms-2">
                       Comanda <i className="fa fa-caret-down ms-2" />
                     </Link>
                   </span>
@@ -107,6 +107,12 @@ class Header extends React.Component<any, any> {
                   <li className="dropdown-item d-flex align-items-center">
                     <Link to="/additions" className="ms-2">
                       <i className="fa fa-list-ul me-1" /> Adições
+                    </Link>
+                  </li>
+
+                  <li className="dropdown-item d-flex align-items-center">
+                    <Link to="/orders" className="ms-2">
+                      <i className="fa fa-eye me-1" /> Visualizar
                     </Link>
                   </li>
                 </ul>
