@@ -1,0 +1,48 @@
+section {
+  height: 100%;
+  width: 100%;
+
+  hr {
+    color: var(--secondary) !important;
+    height: 3px;
+    width: 80%;
+  }
+
+  .saleChartArea,
+  .paymentChartArea,
+  .productChartArea {
+    p {
+      color: var(--secondary) !important;
+      margin: 0;
+    }
+
+    box-shadow: 1px 1px 3px var(--black);
+    border-radius: 5px;
+  }
+
+  .formFilter {
+    span {
+      color: var(--secondary);
+    }
+
+    .ant-picker {
+      background-color: var(--primary-500);
+      border: 1px solid var(--secondary);
+      border-radius: 4px;
+    }
+
+    .ant-picker-clear {
+      background-color: var(--primary-500);
+    }
+
+    input {
+      background-color: var(--primary-500);
+      color: var(--secondary) !important;
+      font-size: 0.7rem;
+
+      &::placeholder {
+        color: var(--secondary) !important;
+      }
+    }
+  }
+}

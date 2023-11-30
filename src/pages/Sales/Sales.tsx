@@ -8,13 +8,14 @@ import isAuthenticated from "../../services/Authentication/Authentication";
 import SaleCard from "../../components/SaleCard/SaleCard";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
-import "./Sales.scss";
 import { Redirect } from "react-router";
 
 import { filter, nextPage, prevPage } from "../../helpers/helpers";
 
 const { RangePicker } = DatePicker;
 const dateFormat = "DD/MM/YYYY";
+
+import "./Sales.scss";
 
 class Sales extends React.Component<any, any> {
   constructor(props: any) {

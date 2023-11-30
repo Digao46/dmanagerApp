@@ -63,7 +63,7 @@ class SaleCard extends React.Component<any, any> {
           <div className="cardHeader d-flex justify-content-around">
             <span className="statusLabel me-1">
               Status:{" "}
-              {this.props.sale.status == "Em Aberto" ? (
+              {this.props.sale.status == "Comanda" ? (
                 <i className="fa fa-box-open" />
               ) : (
                 <i className="fa fa-check" />

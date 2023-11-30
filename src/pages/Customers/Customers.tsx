@@ -2,7 +2,6 @@ import React from "react";
 import { toast } from "react-hot-toast";
 
 import isAuthenticated from "../../services/Authentication/Authentication";
-import isAuthorizated from "../../services/Authorization/Authorization";
 
 import {
   findClients,

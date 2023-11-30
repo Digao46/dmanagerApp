@@ -48,7 +48,7 @@ class AddSale extends React.Component<any, any> {
 
       productsInCart: [],
       paymentMethod: "",
-      status: "Em Aberto",
+      status: "Comanda",
       total: 0,
 
       redirectTo: null,
@@ -220,9 +220,25 @@ class AddSale extends React.Component<any, any> {
   handleStatusChange = (e: any) => {
     let value: number = +e.target.value;
 
-    let status: string;
+    let status: string = "";
 
-    value === 1 ? (status = "Em Aberto") : (status = "Finalizada");
+    switch (value) {
+      case 0:
+        status = "Finalizada";
+        break;
+
+      case 1:
+        status = "Comanda";
+        break;
+
+      case 2:
+        status = "Dividido";
+        break;
+
+      default:
+        "Comanda";
+        break;
+    }
 
     this.setState({ status: status });
   };
@@ -332,9 +348,9 @@ class AddSale extends React.Component<any, any> {
   addSale = async (e: any) => {
     e.preventDefault();
 
-    if (!this.state.client._id && this.state.status == "Em Aberto") {
+    if (!this.state.client._id && this.state.status == "Comanda") {
       return toast.error(
-        "Para uma venda em aberto o cliente precisa ser informado!"
+        "Para uma venda na comanda o cliente precisa ser informado!"
       );
     }
 
@@ -560,6 +576,7 @@ class AddSale extends React.Component<any, any> {
                   <option>Pagamento:</option>
                   <option value={0}>Pago</option>
                   <option value={1}>Comanda</option>
+                  <option value={2}>Dividido</option>
                 </select>
 
                 <select

@@ -18,6 +18,7 @@ import "./TabCard.scss";
 import { Redirect } from "react-router";
 import AdditionCard from "../../components/AdditionCard/AdditionCard";
 import DescriptionCard from "../../components/DescriptionCard/DescriptionCard";
+import { Link } from "react-router-dom";
 
 class TabCard extends React.Component<any, any> {
   constructor(props: any) {
@@ -124,7 +125,6 @@ class TabCard extends React.Component<any, any> {
 
     findTabCardDataByClientId(client._id, query)
       .then((res: any) => {
-        console.log(res);
         let pages = Math.ceil(res.data.data.documents.qtd / query.limit);
 
         this.setState({
@@ -317,18 +317,16 @@ class TabCard extends React.Component<any, any> {
 
               {this.state.isFiltered && (
                 <div className="d-flex flex-column align-items-center justify-content-center col-12">
-                  <button
-                    onClick={() =>
-                      this.setState({ reditectTo: "/discounts/add" })
-                    }
-                    className="btnFinish mb-1 col-8"
+                  <Link
+                    to={"/discounts/add"}
+                    className="btnDiscount mb-1 col-8"
                   >
                     Descontar
-                  </button>
+                  </Link>
 
                   <button
-                    onClick={() => window.alert("Enviando mensagem!")}
-                    className="btnFinish mt-1 col-8"
+                    onClick={() => window.alert("Em desenvolvimento!")}
+                    className="btnNotify mt-1 col-8"
                   >
                     Cobrar
                   </button>

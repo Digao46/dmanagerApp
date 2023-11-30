@@ -11,7 +11,7 @@ import DescriptionCard from "../../components/DescriptionCard/DescriptionCard";
 import "./Discounts.scss";
 import { Redirect } from "react-router";
 
-import { filter, nextPage, prevPage } from "../../helpers/helpers";
+import { nextPage, prevPage } from "../../helpers/helpers";
 
 // const { RangePicker } = DatePicker;
 // const dateFormat = "DD/MM/YYYY";

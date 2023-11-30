@@ -29,11 +29,18 @@ import AddAddition from "../../pages/Additions/Add/AddAddition";
 import AddDiscount from "../../pages/Discounts/Add/AddDiscount";
 import Discounts from "../../pages/Discounts/Discounts";
 
+import Cash from "../../pages/Cash/Cash";
+
 class Main extends React.Component<any, any> {
   render() {
     return (
       <main className="mt-4">
         <HashRouter basename="/">
+          {/* Caixa */}
+          <Route path="/cash" exact>
+            <Cash />
+          </Route>
+
           {/* Usuários */}
           <Route path="/users/edit" exact>
             <EditUser />

@@ -25,7 +25,7 @@ class AddAddition extends React.Component<any, any> {
 
       description: "",
       total: 0,
-      status: "Em Aberto",
+      status: "Comanda",
 
       redirectTo: null,
     };
@@ -99,7 +99,7 @@ class AddAddition extends React.Component<any, any> {
         name: "",
         _id: "",
       },
-      status: "Em Aberto",
+      status: "Comanda",
       seller: {
         username: "",
         _id: "",
