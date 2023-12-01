@@ -6,24 +6,24 @@ section {
     height: auto;
     padding: 20px 0;
     background-color: var(--primary-500);
-    box-shadow: 0px 1px 5px rgba(112, 111, 111, 0.15);
+    box-shadow: 1px 1px 5px rgba(112, 111, 111, 0.15);
 
     border-radius: 8px;
 
     .logoNTitle {
       img {
-        height: 280px;
-        width: 280px;
+        height: 300px;
+        width: 300px;
       }
 
-      h1 {
+      span {
         background: linear-gradient(#423b2b, var(--secondary));
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
 
-        font-size: 48px;
+        font-size: 1.1rem;
       }
     }
 
