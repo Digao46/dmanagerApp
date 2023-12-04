@@ -83,10 +83,40 @@ class Cash extends React.Component<any, any> {
       ],
       findCashData
     ).then((res) => {
+      Object.assign(productOption, {
+        legend: {
+          data: ["Vendas"],
+          textStyle: {
+            color: "#e6c779",
+          },
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        xAxis: {
+          type: "category",
+          data: res.data.data.mostSoldProducts.products.map(
+            (item) => item.name
+          ),
+        },
+        series: [
+          {
+            type: "bar",
+            name: "Vendas",
+            data: res.data.data.mostSoldProducts.products.map(
+              (item) => item.qtd
+            ),
+            color: "#198754",
+          },
+        ],
+      });
+
       Object.assign(statusOption, {
         legend: [
           {
-            data: res.data.data.salesStatusTotal.legendData,
             textStyle: {
               color: "#e6c779",
             },
@@ -103,7 +133,6 @@ class Cash extends React.Component<any, any> {
       Object.assign(paymentOption, {
         legend: [
           {
-            data: res.data.data.paymentMethodsTotal.legendData,
             textStyle: {
               color: "#e6c779",
             },
@@ -113,38 +142,6 @@ class Cash extends React.Component<any, any> {
           {
             type: "pie",
             data: res.data.data.paymentMethodsTotal.data,
-          },
-        ],
-      });
-
-      Object.assign(productOption, {
-        legend: {
-          data: ["Quantidade de vendas"],
-          textStyle: {
-            color: "#e6c779",
-          },
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-        },
-
-        xAxis: {
-          type: "category",
-          data: res.data.data.mostSoldProducts.products.map(
-            (item) => item.name
-          ),
-        },
-
-        series: [
-          {
-            type: "bar",
-            name: "Quantidade de vendas",
-            data: res.data.data.mostSoldProducts.products.map(
-              (item) => item.qtd
-            ),
           },
         ],
       });
@@ -182,15 +179,31 @@ class Cash extends React.Component<any, any> {
         findCashData
       ).then((res) => {
         Object.assign(productOption, {
-          xAxis: {
-            data: res.data.data.mostSoldProducts.productsNames,
+          legend: {
+            data: ["Vendas"],
+            textStyle: {
+              color: "#e6c779",
+            },
           },
-
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+          },
+          xAxis: {
+            type: "category",
+            data: res.data.data.mostSoldProducts.products.map(
+              (item) => item.name
+            ),
+          },
           series: [
             {
               type: "bar",
               name: "Vendas",
-              data: res.data.data.mostSoldProducts.salesQtd,
+              data: res.data.data.mostSoldProducts.products.map(
+                (item) => item.qtd
+              ),
               color: "#198754",
             },
           ],
@@ -199,7 +212,6 @@ class Cash extends React.Component<any, any> {
         Object.assign(statusOption, {
           legend: [
             {
-              data: res.data.data.salesStatusTotal.legendData,
               textStyle: {
                 color: "#e6c779",
               },
@@ -216,7 +228,6 @@ class Cash extends React.Component<any, any> {
         Object.assign(paymentOption, {
           legend: [
             {
-              data: res.data.data.paymentMethodsTotal.legendData,
               textStyle: {
                 color: "#e6c779",
               },
