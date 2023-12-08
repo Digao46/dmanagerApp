@@ -62,14 +62,11 @@ class Table extends React.Component<any, any> {
       if (tData.type == "date") {
         const date = new Date(data[tData.field]);
 
-        const newDate = `
-        ${date.getDay() < 10 ? "0" + date.getDay() : date.getDay()}
-        /
-        ${date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth()}
-        /
-        ${date.getFullYear()}`;
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const fullYear = date.getFullYear();
 
-        return newDate;
+        return `${day}/${month}/${fullYear}`;
       }
 
       if (tData.type == "phone") {
