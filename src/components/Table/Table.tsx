@@ -102,7 +102,7 @@ class Table extends React.Component<any, any> {
                 )
             )}
 
-            {isAuthorizated() && <th>Ações</th>}
+            {(isAuthorizated() || this.props.allowActions) && <th>Ações</th>}
           </tr>
         </thead>
 
@@ -118,7 +118,7 @@ class Table extends React.Component<any, any> {
                   )
               )}
 
-              {isAuthorizated() && (
+              {(isAuthorizated() || this.props.allowActions) && (
                 <td>
                   <div className="d-flex justify-content-center">
                     {this.props.actions.map((action: any, key: any) => (
