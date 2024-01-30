@@ -49,6 +49,9 @@ class ClientsTrash extends React.Component<any, any> {
           authorizated: true,
         },
       ],
+
+      allowActions: true,
+
       actions: [
         {
           class: "restore",
@@ -177,6 +180,7 @@ class ClientsTrash extends React.Component<any, any> {
             <Table
               content={this.state.content}
               data={this.state.clients}
+              allowActions={this.state.allowActions}
               actions={this.state.actions}
               previousPage={this.previousPage}
               nextPage={this.nextPage}
