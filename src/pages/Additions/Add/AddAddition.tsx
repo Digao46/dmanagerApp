@@ -37,7 +37,7 @@ class AddAddition extends React.Component<any, any> {
       this.setState({ redirectTo: "/login" });
     }
 
-    findClients(this.state.clientsQuery)
+    findClients()
       .then((res: any) => {
         this.setState({ clients: res.data.data.clients });
       })

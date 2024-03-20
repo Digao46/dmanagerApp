@@ -2,10 +2,7 @@ import React from "react";
 import { DatePicker, Space } from "antd";
 import { toast } from "react-hot-toast";
 
-import {
-  findAdditions,
-  filterAdditions,
-} from "../../services/Api/TabCard/Additions/AdditionsEndpoint";
+import { findAdditions } from "../../services/Api/TabCard/Additions/AdditionsEndpoint";
 import isAuthenticated from "../../services/Authentication/Authentication";
 
 import AdditionCard from "../../components/AdditionCard/AdditionCard";
@@ -90,7 +87,7 @@ class Additions extends React.Component<any, any> {
   filterAdditions = async (e: any, field: string, conditions: any[]) => {
     e.preventDefault();
 
-    await filter(this, field, conditions, filterAdditions)
+    await filter(this, field, conditions, findAdditions)
       .then((res: any) => {
         let pages = Math.ceil(
           res.data.data.documents.qtd / this.state.query.limit

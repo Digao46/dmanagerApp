@@ -18,7 +18,7 @@ clientsEndpoint.interceptors.request.use(
   }
 );
 
-export async function findClients(query: any) {
+export async function findClients(query?: any) {
   const params = new URLSearchParams(query);
 
   return await clientsEndpoint.get("/", { params });

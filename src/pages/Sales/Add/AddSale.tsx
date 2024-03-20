@@ -18,13 +18,10 @@ class AddSale extends React.Component<any, any> {
     super(props);
     this.state = {
       productsQuery: {
-        limit: 200,
-        page: 1,
         orderBy: JSON.stringify([
           { field: "category", direction: "asc" },
           { field: "name", direction: "asc" },
         ]),
-        where: {},
       },
       products: [],
       product: {
@@ -38,10 +35,7 @@ class AddSale extends React.Component<any, any> {
       },
 
       clientsQuery: {
-        limit: 200,
-        page: 1,
         orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
-        where: {},
       },
       clients: [],
       client: {},

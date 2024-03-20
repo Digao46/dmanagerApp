@@ -2,7 +2,7 @@ import React from "react";
 import { DatePicker, Space } from "antd";
 import { toast } from "react-hot-toast";
 
-import { filterSales, findSales } from "../../services/Api/Sales/SalesEndpoint";
+import { findSales } from "../../services/Api/Sales/SalesEndpoint";
 import isAuthenticated from "../../services/Authentication/Authentication";
 
 import SaleCard from "../../components/SaleCard/SaleCard";
@@ -88,7 +88,7 @@ class Sales extends React.Component<any, any> {
   filterSales = async (e: any, field: string, conditions: any[]) => {
     e.preventDefault();
 
-    await filter(this, field, conditions, filterSales)
+    await filter(this, field, conditions, findSales)
       .then((res: any) => {
         let pages = Math.ceil(
           res.data.data.documents.qtd / this.state.query.limit

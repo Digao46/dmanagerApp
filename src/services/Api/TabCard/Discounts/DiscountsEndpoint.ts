@@ -18,12 +18,6 @@ discountsEndpoint.interceptors.request.use(
   }
 );
 
-export async function findDiscounstByClientId(id: string, query: any) {
-  const params = new URLSearchParams(query);
-
-  return await discountsEndpoint.get(`/${id}`, { params });
-}
-
 export async function findDiscounts(query: any) {
   const params = new URLSearchParams(query);
 

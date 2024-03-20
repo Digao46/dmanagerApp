@@ -15,10 +15,7 @@ class AddDiscount extends React.Component<any, any> {
     super(props);
     this.state = {
       clientsQuery: {
-        limit: 200,
-        page: 1,
         orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
-        where: {},
       },
       clients: [],
       client: {},

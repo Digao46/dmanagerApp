@@ -42,10 +42,7 @@ class TabCard extends React.Component<any, any> {
       clients: [],
       client: {},
       clientsQuery: {
-        limit: 300,
-        page: 1,
         orderBy: JSON.stringify([{ field: "name", direction: "asc" }]),
-        where: {},
       },
 
       isFiltered: false,
